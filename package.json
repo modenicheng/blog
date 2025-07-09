@@ -1,0 +1,30 @@
+{
+  "name": "modenc",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A site for documents and daily records.",
+  "packageManager": "yarn@4.6.0",
+  "author": "modenicheng <cheng20070225@outlook.com>",
+  "license": "MIT",
+  "engines": {
+    "node": "^20.6.0 || >=22.0.0"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:dev-clean": "vuepress dev docs --clean-cache --clean-temp",
+    "docs:build": "vuepress build docs --clean-cache --clean-temp",
+    "docs:preview": "http-server docs/.vuepress/dist",
+    "vp-update": "yarn dlx vp-update"
+  },
+  "devDependencies": {
+    "@vuepress/bundler-vite": "2.0.0-rc.23",
+    "http-server": "^14.1.1",
+    "typescript": "^5.8.3",
+    "vue": "^3.5.17",
+    "vuepress": "2.0.0-rc.23",
+    "vuepress-theme-plume": "1.0.0-rc.156"
+  },
+  "dependencies": {
+    "corepack": "^0.33.0"
+  }
+}
