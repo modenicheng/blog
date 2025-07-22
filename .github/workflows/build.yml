@@ -48,7 +48,7 @@ jobs:
           # Artifact name
           name: Artifact for ${{  github.sha  }}
           # A file, directory or wildcard pattern that describes what to upload
-          path: ./dist.tar.gz
+          path: ./docs/.vuepress/dist.tar.gz
           # The desired behavior if no files are found using the provided path.
     
           
