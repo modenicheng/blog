@@ -29,7 +29,11 @@ jobs:
         uses: actions/setup-node@v3.9.1
 
       - name: Install dependencies
-        run: npm install
+        run: npm install -g corepack
+        
+      - run: corepack enable
+
+      - run: yarn
 
       - name: Build site
-        run: npm run docs:build
+        run: yarn docs:build
