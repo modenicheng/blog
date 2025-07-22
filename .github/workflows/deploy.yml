@@ -17,7 +17,7 @@ on:
 jobs:
 
   build:
-    uses: modenicheng/blog/blob/master/.github/workflows/build.yml@master
+    uses: modenicheng/blog/.github/workflows/build.yml@master
     
   deploy:
       runs-on: ubuntu-latest
