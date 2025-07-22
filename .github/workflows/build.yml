@@ -40,7 +40,7 @@ jobs:
         run: yarn docs:build
 
       - name: Compress
-        run: tar -zcvf ./dist.tar.gz ./docs/.vuepress/dist
+        run: cd ./docs/.vuepress && tar -zcvf ./dist.tar.gz ./dist
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.2
