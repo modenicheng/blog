@@ -51,8 +51,8 @@ jobs:
             cd /srv
             tar -zxvf dist.tar.gz
 
-            mv dist/* blog-artifact
-            rm -rf dist/
+            mv ./docs/.vuepress/dist/* blog-artifact
+            rm -rf ./docs
             rm dist.tar.gz
 
             echo "Restarting Nginx..."
