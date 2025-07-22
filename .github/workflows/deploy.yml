@@ -50,16 +50,11 @@ jobs:
             echo "Extracting files..."
             cd /srv
             tar -zxvf dist.tar.gz
-
-            # echo "Removing old files..."
-            # rm -rf blog-artifact
             
             echo "Copying new files..."
-            mkdir -p blog-artifact
-            mv -f ./dist/* blog-artifact
+            mv dist/ blog-artifact/
 
             echo "Cleaning up temporary files..."
-            rm -rf ./dist
             rm -f dist.tar.gz
 
             echo "Restarting Nginx..."
