@@ -35,6 +35,7 @@ jobs:
             ssh root@modenc.top << 'EOF'
               cd /srv/blog
               git pull origin master
+              yarn
               yarn docs:build
               systemctl restart nginx
               echo "Deployment completed!"
