@@ -13,7 +13,6 @@
 import { defineThemeConfig } from "vuepress-theme-plume";
 import navbar from "./navbar";
 import notes from "./notes";
-import { version } from '../../package.json'
 
 /**
  * @see https://theme-plume.vuejs.press/config/basic/
