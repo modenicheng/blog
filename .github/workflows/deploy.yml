@@ -51,7 +51,14 @@ jobs:
             cd /srv
             tar -zxvf dist.tar.gz
 
-            mv ./dist/* blog-artifact
+            # echo "Removing old files..."
+            # rm -rf blog-artifact
+            
+            echo "Copying new files..."
+            mkdir -p blog-artifact
+            mv -f ./dist/* blog-artifact
+
+            echo "Cleaning up temporary files..."
             rm -rf ./dist
             rm -f dist.tar.gz
 
