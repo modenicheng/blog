@@ -1,5 +1,7 @@
 ---
 pageLayout: home
+backToTop: false
+
 config:
   -
     type: hero
@@ -24,6 +26,18 @@ config:
           text: Github
           link: https://github.com/modenicheng
 
+
+  -
+    type: profile
+    name: modenicheng
+    description: 喜欢钻研各种新奇的东西。
+
+  -
+    type: custom
+
   -
     type: blog
+    full: true
 ---
+
+# 主页施工中 🛠️
