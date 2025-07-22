@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+  
+        - name: Setup SSH
+          uses: webfactory/ssh-agent@v0.9.0
+          with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  
+        - name: Add server to known_hosts
+          run: |
+            ssh-keyscan -H modenc.top >> ~/.ssh/known_hosts
+  
+        - name: Execute remote commands
+          run: |
+            ssh root@modenc.top << 'EOF'
+              cd /srv/blog
+              git pull origin master
+              yarn docs:build
+              systemctl restart nginx
+              echo "Deployment completed!"
+            EOF
