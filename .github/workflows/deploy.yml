@@ -15,28 +15,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+  build:
+    uses: modenicheng/blog/blob/master/.github/workflows/build.yml@master
+    
   deploy:
       runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-  
-        - name: Setup SSH
-          uses: webfactory/ssh-agent@v0.9.0
-          with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-  
-        - name: Add server to known_hosts
-          run: |
-            ssh-keyscan -H modenc.top >> ~/.ssh/known_hosts
-  
-        - name: Execute remote commands
-          run: |
-            ssh root@modenc.top << 'EOF'
-              cd /srv/blog
-              git pull origin master
-              yarn
-              yarn docs:build
-              systemctl restart nginx
-              echo "Deployment completed!"
-            EOF
+
+      steps: 
+        - name: Download a Build Artifact
+          uses: actions/download-artifact@v4.3.0
+
+                      
