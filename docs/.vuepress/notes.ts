@@ -33,6 +33,12 @@ import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
 //   // sidebar: 'auto',
 // })
 
+const opsNote = defineNoteConfig({
+  dir: 'Ops',
+  link: '/ops',
+  sidebar: 'auto',
+})
+
 /**
  * 导出所有的 note
  * 每一个 note 都应该填入到 `notes.notes` 数组中
@@ -41,5 +47,5 @@ import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
 export default defineNotesConfig({
   dir: 'notes',
   link: '/',
-  notes: [],
+  notes: [opsNote],
 })
