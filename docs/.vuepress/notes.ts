@@ -36,7 +36,14 @@ import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
 const opsNote = defineNoteConfig({
   dir: 'Ops',
   link: '/ops',
-  sidebar: 'auto',
+  sidebar: [
+    {
+      text: '运维 / Operations',
+      items: [
+        'zsh-configure',
+      ]
+    },
+  ],
 })
 
 /**

@@ -20,7 +20,7 @@ config:
         -
           # theme: brand
           text: 知识库 & 笔记 →
-          link: /article/
+          link: /notes/
         -
           theme: alt
           text: Github

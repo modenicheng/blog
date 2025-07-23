@@ -50,7 +50,7 @@ export default defineUserConfig({
     editLink: true,
     lastUpdated: { formatOptions: { dateStyle: "short", timeStyle: "short" } },
     contributors: true,
-    changelog: false,
+    changelog: true,
 
     /**
      * 博客
