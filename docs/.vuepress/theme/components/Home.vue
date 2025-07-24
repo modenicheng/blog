@@ -52,7 +52,7 @@ const getNDC = (x: number, y: number, canvas: HTMLCanvasElement) => {
     y: -((y - rect.top) / rect.height) * 2 + 1,
   };
 };
-const dotNum = 114;
+const dotNum = 5;
 const dots: Dot[] = [];
 const tails: Tail[] = [];
 class Tail {
@@ -98,7 +98,7 @@ class Tail {
       this.mesh.material.color.set(
         new THREE.Color(this.color.r, this.color.g, this.color.b)
       );
-      this.mesh.material.opacity = this.lifetime / this.totaltime;
+      this.mesh.material.opacity = (this.lifetime / this.totaltime) * (dark.value ? 1 : 0.6);
       this.mesh.material.transparent = true;
       this.mesh.material.needsUpdate = true;
       let scaleIndex = Math.sqrt(this.lifetime / this.totaltime);
@@ -107,9 +107,9 @@ class Tail {
   }
 
   setColor() {
-    this.color.r = this.mesh.position.x / 15 + 0.8;
+    this.color.r = this.pos.x / 30 + 0.7 * (dark.value ? 1 : 1.2);
     this.color.g = 0.05;
-    this.color.b = this.mesh.position.y / 8 + 0.8;
+    this.color.b = this.pos.y / 10 + 0.7 * (dark.value ? 1 : 1.2);
   }
 }
 
@@ -219,7 +219,7 @@ const main = () => {
   // 每次都设置渲染器尺寸，保证和canvas一致
   renderer.setSize(window.innerWidth, window.innerHeight, false);
 
-  const fov = 60;
+  const fov = 70;
   const aspect = window.innerWidth / window.innerHeight;
   const near = 0.1;
   const far = 200;
@@ -290,12 +290,13 @@ const main = () => {
 
     for (let i = 0; i < dots.length; i++) {
       dots[i].update(worldPos);
+      tails.push(new Tail(scene, 400, dots[i].pos));
     }
 
     for (let i = 0; i < tails.length; i++) {
       tails[i].update();
     }
-    tails.push(new Tail(scene, 400, tailDot.pos));
+    // tails.push(new Tail(scene, 400, tailDot.pos));
 
     l.update(tailDot.pos, worldPos);
 
