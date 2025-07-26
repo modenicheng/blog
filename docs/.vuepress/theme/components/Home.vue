@@ -10,8 +10,6 @@ import Stats from "three/addons/libs/stats.module.js";
 
 // custom
 import { getThemeBg } from "../utils";
-import { get } from "http";
-
 
 const dark = useDarkMode();
 
@@ -116,6 +114,8 @@ class Line {
     const mat = new THREE.LineBasicMaterial({ color: this.color });
     this.mesh = new THREE.Line(geo, mat);
   }
+
+  update() {}
 }
 
 const main = () => {
@@ -134,10 +134,10 @@ const main = () => {
   const fov = 70;
   const aspect = window.innerWidth / window.innerHeight;
   const near = 0.1;
-  const far = 500;
+  const far = 300;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   // camera.position.set(30, 30, 30);
-  camera.position.set(0, 0, 30);
+  camera.position.set(0, 0, 0);
 
   const scene = new THREE.Scene();
   scene.background = null; // 透明背景
@@ -166,52 +166,58 @@ const main = () => {
 
   //
 
-  const fog = new THREE.Fog(getThemeBg().bg, 0, 500);
+  const fog = new THREE.Fog(getThemeBg().bg, 0, 150);
   scene.fog = fog;
 
   //
   const lines: Line[] = [];
-  const gapX = 50;
-  const gapY = 50;
-  const gapZ = 50;
+  const gapX = 20;
+  const gapY = 20;
+  const gapZ = 20;
   const range = 10;
+
+  const clock = new THREE.Clock();
   for (let i = range; i > -range; i--) {
     for (let j = range; j > -range; j--) {
       const l = new Line(
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, 0, -1),
-        750,
-        new THREE.Color(0xaaaaaa)
+        300
       );
       l.mesh.position.set(i * gapX, j * gapY, 150);
+      l.update = () => {
+        l.mesh.translateY(Math.sin(clock.getElapsedTime() + i) * 0.003);
+        l.mesh.translateX(Math.sin(clock.getElapsedTime() + j) * 0.003);
+        // @ts-ignore
+        l.mesh.material.color = new THREE.Color(
+          `rgb(${dark.value ? 0 : 100}, ${Math.round(
+            dark.value
+              ? ((j + range) / (range * 2)) *
+                  200 *
+                  (0.8 + Math.sin(clock.getElapsedTime() * 2) * 0.1)
+              : (((j + range) / (range * 2)) * 100 + 155) *
+                  (0.85 + Math.sin(clock.getElapsedTime() * 2) * 0.05)
+          )}, ${Math.round(
+            dark.value
+              ? ((j + range) / (range * 2)) * 255
+              : (((j + range) / (range * 2)) * 100 + 155) *
+                  (0.9 + Math.sin(clock.getElapsedTime() * 2 + j + i) * 0.1)
+          )})`
+        );
+      };
       lines.push(l);
       scene.add(l.mesh);
     }
-  }
-
-  //
-
-  let controls: OrbitControls;
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  if (orbitControlsStatus) {
-    controls.enabled = true;
-  } else {
-    controls.enabled = false;
   }
 
   const stats = new Stats();
   if (statsDom) statsDom.appendChild(stats.dom);
 
   const canvas = renderer.domElement;
-  let lastBgColor:string = getThemeBg().bg;
+  let lastBgColor: string = getThemeBg().bg;
 
   const animate = () => {
     renderer.render(scene, camera);
-
-    // 镜头移动控制
-    if (controls && orbitControlsStatus) controls.update();
 
     // stats
     stats.update();
@@ -229,18 +235,23 @@ const main = () => {
     }
     const ndc = getNDC(mouseX, mouseY, canvas);
     const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.5).unproject(camera);
-    const scale = 1;
-    camera.position.set(worldPos.x * scale, worldPos.y * scale, 30);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    const scale = 0.8;
+    // camera.position.set(worldPos.x * scale, worldPos.y * scale, 10);
+    camera.position.set(worldPos.x, worldPos.y * scale, 10);
+    camera.lookAt(new THREE.Vector3(0, 5, 0));
 
     // 处理背景
-    
+
     let bg = getThemeBg().bg;
     if (lastBgColor !== bg) {
       lastBgColor = bg;
       fog.color = new THREE.Color(bg);
     }
 
+    //
+    for (let i = 0; i < lines.length; i++) {
+      lines[i].update();
+    }
     // logger
     if (logDom) {
       logDom!.innerHTML = `
@@ -287,7 +298,7 @@ let lastT = performance.now();
 
 //
 const orbitControlsStatus = false;
-const debug = ref(true);
+const debug = ref(false);
 </script>
 <template>
   <div>
@@ -297,14 +308,20 @@ const debug = ref(true);
     />
     <div v-show="debug" :class="['fps']" id="fps"></div>
     <div v-show="debug" :class="['data']">
-      <div id="log">
-      
-      </div>
+      <div id="log"></div>
+    </div>
+    <div class="content">
+      {{ props }}
     </div>
   </div>
 </template>
 
 <style scoped>
+.content {
+  width: 100%;
+  height: calc(100vh - var(--vp-nav-height));
+}
+
 .home-canvas {
   overflow: hidden;
   display: block;
@@ -314,6 +331,9 @@ const debug = ref(true);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .data {

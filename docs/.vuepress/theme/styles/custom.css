@@ -48,12 +48,11 @@
   --vp-c-text-3: rgba(235, 235, 245, 0.38);
   */
 }
-
+/* 
 .vp-content {
   padding-top: 0 !important;
-}
+} */
 
 .top .mini-search {
-  /* background-color: #831b1b !important; */
   opacity: 0.5 !important;
 }
