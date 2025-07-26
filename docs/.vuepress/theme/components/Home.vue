@@ -269,9 +269,9 @@ const main = () => {
     // camera.position.set(worldPos.x * scale, worldPos.y * scale, 10);
     if (isMobile()) {
       if (window.DeviceOrientationEvent) {
-        camera.position.set(gamma * 0.015, -(beta + 35) * 0.01, 10);
+        camera.position.set(gamma * 0.03, -(beta + 25) * 0.03, 10);
+        camera.lookAt(new THREE.Vector3(gamma * 0.01, -(beta + 25) * 0.06 + 5, 0));
       }
-      camera.lookAt(new THREE.Vector3(0, 5, 0));
     } else if (mouseX && mouseY) {
       camera.position.set(
         new THREE.Vector3(ndc.x * 0.2 + 0.7, ndc.y, 0.5).unproject(camera).x,
@@ -394,7 +394,7 @@ const router = useRouter();
   gap: 1rem;
   display: flex;
   flex-direction: column;
-  font-family: 'Segoe UI',  sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .title {
@@ -441,6 +441,7 @@ const router = useRouter();
   background-color: var(--vp-c-brand-soft);
   backdrop-filter: blur(0.1rem);
   box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.1);
+  animation: flyUp 1.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .action:hover {
