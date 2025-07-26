@@ -2,7 +2,7 @@ import { computed } from "vue";
 
 const isMobile = computed(() => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
+    window.navigator.userAgent
   );
 });
 
