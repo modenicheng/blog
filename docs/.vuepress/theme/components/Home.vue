@@ -5,11 +5,10 @@ import { useDarkMode } from "vuepress-theme-plume/client";
 
 // three.js
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/Addons.js";
 import Stats from "three/addons/libs/stats.module.js";
 
 // custom
-import { getThemeBg } from "../utils";
+import { getThemeBg, isMobile } from "../utils";
 
 const dark = useDarkMode();
 
@@ -17,7 +16,6 @@ interface propData {
   hero: any;
 }
 const props = defineProps<ThemeHomeConfigBase & propData>();
-
 const canvasRef = ref<HTMLCanvasElement>();
 
 const resizeCanvas = () => {
@@ -27,18 +25,36 @@ const resizeCanvas = () => {
   }
 };
 
+let alpha = 0;
+let beta = 0;
+let gamma = 0;
+
+const updateDeviceRotation = (event: DeviceOrientationEvent) => {
+  alpha = event.alpha!;
+  beta = event.beta!;
+  gamma = event.gamma!;
+
+  console.log(beta, gamma, alpha);
+};
+
 onMounted(() => {
   resizeCanvas();
   mouseX = (window.innerWidth * 4) / 5;
   mouseY = window.innerHeight / 2;
   window.addEventListener("resize", resizeCanvas);
   window.addEventListener("mousemove", updateMousePos);
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", updateDeviceRotation, true);
+  }
   main();
 });
 
 onUnmounted(() => {
   window.removeEventListener("resize", resizeCanvas);
   window.removeEventListener("mousemove", updateMousePos);
+  if (window.DeviceOrientationEvent) {
+    window.removeEventListener("deviceorientation", updateDeviceRotation);
+  }
 });
 
 let mouseX: number, mouseY: number;
@@ -88,7 +104,7 @@ class Line {
     start: THREE.Vector3,
     vec: THREE.Vector3,
     len: number,
-    color: THREE.Color = new THREE.Color(0x00ff00)
+    color: THREE.Color = new THREE.Color(0xaaaaaa)
   ) {
     this.start = start;
     this.vec = vec;
@@ -190,21 +206,25 @@ const main = () => {
         l.mesh.translateX(Math.sin(clock.getElapsedTime() + j) * 0.003);
         // @ts-ignore
         l.mesh.material.color = new THREE.Color(
-          `rgb(${dark.value ? 0 : 100}, ${Math.round(
+          `rgb(${dark.value ? 0 : 140}, ${Math.round(
             dark.value
               ? ((j + range) / (range * 2)) *
-                  200 *
-                  (0.8 + Math.sin(clock.getElapsedTime() * 2) * 0.1)
-              : (((j + range) / (range * 2)) * 100 + 155) *
-                  (0.85 + Math.sin(clock.getElapsedTime() * 2) * 0.05)
+                  230 *
+                  (0.8 + Math.sin(clock.getElapsedTime()) * 0.1)
+              : (((j + range) / (range * 2)) * 100 + 175) *
+                  (0.85 + Math.sin(clock.getElapsedTime()) * 0.1)
           )}, ${Math.round(
             dark.value
-              ? ((j + range) / (range * 2)) * 255
-              : (((j + range) / (range * 2)) * 100 + 155) *
-                  (0.9 + Math.sin(clock.getElapsedTime() * 2 + j + i) * 0.1)
+              ? ((i + range) / (range * 2)) *
+                  255 *
+                  (0.95 + Math.sin(clock.getElapsedTime() + 10 * (i + j)) * 0.1)
+              : (((i + range) / (range * 2)) * 130 + 170) *
+                  (0.97 +
+                    Math.sin(clock.getElapsedTime() + 10 * (i + j)) * 0.03)
           )})`
         );
       };
+      l.update();
       lines.push(l);
       scene.add(l.mesh);
     }
@@ -215,6 +235,12 @@ const main = () => {
 
   const canvas = renderer.domElement;
   let lastBgColor: string = getThemeBg().bg;
+
+  {
+    const worldPos = new THREE.Vector3(0, 0, 0.5).project(camera);
+    camera.position.set(worldPos.x, worldPos.y, 10);
+    camera.lookAt(new THREE.Vector3(0, 5, 0));
+  }
 
   const animate = () => {
     renderer.render(scene, camera);
@@ -237,8 +263,11 @@ const main = () => {
     const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.5).unproject(camera);
     const scale = 0.8;
     // camera.position.set(worldPos.x * scale, worldPos.y * scale, 10);
-    camera.position.set(worldPos.x, worldPos.y * scale, 10);
-    camera.lookAt(new THREE.Vector3(0, 5, 0));
+    if (isMobile.value) {
+    } else {
+      camera.position.set(worldPos.x, worldPos.y * scale, 10);
+      camera.lookAt(new THREE.Vector3(0, 5, 0));
+    }
 
     // 处理背景
 
@@ -283,6 +312,11 @@ const main = () => {
     ${camera.up.y.toFixed(3)}
     ${camera.up.z.toFixed(3)}
     <br />
+    rotation:
+      ${beta}
+      ${gamma}
+      ${alpha}
+
     `;
     } else {
       logDom = document.getElementById("log");
@@ -298,7 +332,7 @@ let lastT = performance.now();
 
 //
 const orbitControlsStatus = false;
-const debug = ref(false);
+const debug = ref(true);
 </script>
 <template>
   <div>
@@ -309,6 +343,7 @@ const debug = ref(false);
     <div v-show="debug" :class="['fps']" id="fps"></div>
     <div v-show="debug" :class="['data']">
       <div id="log"></div>
+      {{ isMobile }}
     </div>
     <div class="content">
       {{ props }}
