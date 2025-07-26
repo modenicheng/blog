@@ -317,10 +317,9 @@ const main = () => {
     ${camera.up.z.toFixed(3)}
     <br />
     rotation:
-      ${beta}
-      ${gamma}
-      ${alpha}
-
+      ${beta ? beta.toFixed(5) : "null"} <br />
+      ${gamma ? gamma.toFixed(5) : "null"} <br />
+      ${alpha ? alpha.toFixed(5) : "null"} <br />
     `;
     } else {
       logDom = document.getElementById("log");
