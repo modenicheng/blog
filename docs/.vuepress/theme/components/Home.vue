@@ -263,7 +263,11 @@ const main = () => {
     const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.5).unproject(camera);
     const scale = 0.8;
     // camera.position.set(worldPos.x * scale, worldPos.y * scale, 10);
-    if (isMobile.value) {
+    if (isMobile()) {
+      if (window.DeviceOrientationEvent) {
+        camera.position.set(gamma * 0.15, -beta * 0.05, 10);
+      }
+      camera.lookAt(new THREE.Vector3(0, 5, 0));
     } else {
       camera.position.set(worldPos.x, worldPos.y * scale, 10);
       camera.lookAt(new THREE.Vector3(0, 5, 0));
