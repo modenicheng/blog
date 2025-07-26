@@ -48,6 +48,7 @@
   --vp-c-text-3: rgba(235, 235, 245, 0.38);
   */
 }
+
 /* 
 .vp-content {
   padding-top: 0 !important;
@@ -55,4 +56,10 @@
 
 .top .mini-search {
   opacity: 0.5 !important;
+  transition: all 0.3s !important;
+}
+
+.mini-search {
+  transition: all 0.3s !important;
+  opacity: 1;
 }

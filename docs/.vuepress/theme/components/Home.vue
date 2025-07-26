@@ -9,6 +9,8 @@ import Stats from "three/addons/libs/stats.module.js";
 
 // custom
 import { getThemeBg, isMobile } from "../utils";
+import { icon } from "mermaid/dist/rendering-util/rendering-elements/shapes/icon.js";
+import { useRouter } from "vuepress/client";
 
 const dark = useDarkMode();
 
@@ -33,13 +35,11 @@ const updateDeviceRotation = (event: DeviceOrientationEvent) => {
   alpha = event.alpha!;
   beta = event.beta!;
   gamma = event.gamma!;
-
-  console.log(beta, gamma, alpha);
 };
 
 onMounted(() => {
   resizeCanvas();
-  mouseX = (window.innerWidth * 4) / 5;
+  mouseX = window.innerWidth / 2;
   mouseY = window.innerHeight / 2;
   window.addEventListener("resize", resizeCanvas);
   window.addEventListener("mousemove", updateMousePos);
@@ -158,28 +158,26 @@ const main = () => {
   const scene = new THREE.Scene();
   scene.background = null; // 透明背景
 
+  // debug axis
+
   const x = new Line(
     new THREE.Vector3(0, 0, 0),
     new THREE.Vector3(1, 0, 0),
     20,
     new THREE.Color(0xff0000)
   );
-  if (debug.value) {
-    const y = new Line(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 1, 0),
-      20,
-      new THREE.Color(0x00ff00)
-    );
-    const z = new Line(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 1),
-      20,
-      new THREE.Color(0x0000ff)
-    );
-    scene.add(x.mesh, y.mesh, z.mesh);
-  }
-
+  const y = new Line(
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0, 1, 0),
+    20,
+    new THREE.Color(0x00ff00)
+  );
+  const z = new Line(
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0, 0, 1),
+    20,
+    new THREE.Color(0x0000ff)
+  );
   //
 
   const fog = new THREE.Fog(getThemeBg().bg, 0, 150);
@@ -248,6 +246,12 @@ const main = () => {
     // stats
     stats.update();
 
+    if (debug.value) {
+      scene.add(x.mesh, y.mesh, z.mesh);
+    } else {
+      scene.remove(x.mesh, y.mesh, z.mesh);
+    }
+
     // 每帧都自适应窗口
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -265,11 +269,15 @@ const main = () => {
     // camera.position.set(worldPos.x * scale, worldPos.y * scale, 10);
     if (isMobile()) {
       if (window.DeviceOrientationEvent) {
-        camera.position.set(gamma * 0.15, -beta * 0.05, 10);
+        camera.position.set(gamma * 0.015, -(beta + 35) * 0.01, 10);
       }
       camera.lookAt(new THREE.Vector3(0, 5, 0));
-    } else {
-      camera.position.set(worldPos.x, worldPos.y * scale, 10);
+    } else if (mouseX && mouseY) {
+      camera.position.set(
+        new THREE.Vector3(ndc.x * 0.2 + 0.7, ndc.y, 0.5).unproject(camera).x,
+        worldPos.y * scale,
+        10
+      );
       camera.lookAt(new THREE.Vector3(0, 5, 0));
     }
 
@@ -317,9 +325,9 @@ const main = () => {
     ${camera.up.z.toFixed(3)}
     <br />
     rotation:
-      ${beta ? beta.toFixed(5) : "null"} <br />
-      ${gamma ? gamma.toFixed(5) : "null"} <br />
-      ${alpha ? alpha.toFixed(5) : "null"} <br />
+      beta: ${beta !== null ? beta.toFixed(5) : "null"} <br />
+      gamma: ${gamma !== null ? gamma.toFixed(5) : "null"} <br />
+      alpha: ${alpha !== null ? alpha.toFixed(5) : "null"} <br />
     `;
     } else {
       logDom = document.getElementById("log");
@@ -329,13 +337,10 @@ const main = () => {
   renderer.setAnimationLoop(animate);
 };
 
-const FPS = 240; // 目标帧率
-const INTERVAL = 1000 / FPS; // 每帧间隔 ms
-let lastT = performance.now();
-
 //
-const orbitControlsStatus = false;
-const debug = ref(true);
+const debug = ref(false);
+
+const router = useRouter();
 </script>
 <template>
   <div>
@@ -346,10 +351,30 @@ const debug = ref(true);
     <div v-show="debug" :class="['fps']" id="fps"></div>
     <div v-show="debug" :class="['data']">
       <div id="log"></div>
-      {{ isMobile }}
+      {{ isMobile() }}
     </div>
     <div class="content">
-      {{ props }}
+      <div class="hero">
+        <div class="title">
+          {{ props.hero.title }}
+        </div>
+        <div class="subtitle">
+          {{ props.hero.subtitle }}
+          <span class="cursor"></span>
+        </div>
+        <div class="text">
+          {{ props.hero.text }}
+        </div>
+        <div class="actions" v-if="props.hero.actions && !isMobile()">
+          <button
+            v-for="item in props.hero.actions"
+            :class="['action', item.theme === 'alt' ? 'alt' : '']"
+            @click="router.push(item.link)"
+          >
+            {{ item.text }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -358,8 +383,77 @@ const debug = ref(true);
 .content {
   width: 100%;
   height: calc(100vh - var(--vp-nav-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.hero {
+  width: calc(var(--vp-layout-max-width) - 60px);
+  padding: 2rem;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI',  sans-serif;
+}
+
+.title {
+  font-size: 10rem;
+  line-height: 10rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  animation: flyUp 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+  background: linear-gradient(120deg, #45a2ff, rgb(183, 17, 255));
+  background-clip: text;
+  width: fit-content;
+  color: transparent;
+}
+.subtitle {
+  font-size: 3rem;
+  line-height: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  animation: flyUp 0.8s cubic-bezier(0.075, 0.82, 0.165, 1);
+  vertical-align: baseline;
+}
+.text {
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  color: var(--vp-c-text-2);
+  animation: flyUp 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  padding: 0 1.5rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  background-color: var(--vp-c-brand-soft);
+  backdrop-filter: blur(0.1rem);
+  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.1);
+}
+
+.action:hover {
+  transition: background-color 0.2s ease;
+  background-color: var(--vp-c-brand-3);
+}
+
+.alt {
+  background-color: rgba(125, 125, 125, 0.1) !important;
+}
+.alt:hover {
+  background-color: rgba(125, 125, 125, 0.3) !important;
+}
 .home-canvas {
   overflow: hidden;
   display: block;
@@ -372,6 +466,7 @@ const debug = ref(true);
   position: fixed;
   top: 0;
   left: 0;
+  animation: fadeIn 1s;
 }
 
 .data {
@@ -386,26 +481,66 @@ const debug = ref(true);
   text-align: end;
   font-family: monospace;
 }
-/* 帧率显示样式 */
-.fps {
-  position: absolute;
-  top: 8px;
-  right: 16px;
-  /* color: #0f0;
-  font-size: 18px;
-  font-family: monospace;
-  text-shadow: 0 0 4px #000;
-  z-index: 10;
-  pointer-events: none; */
-}
-/* .dark-bg {
-  background-image: url(https://img-host.modenc.top/blog/113702964_p0.png);
-}
-.light-bg {
-  background-image: url(https://img-host.modenc.top/blog/F0hZFFraMAEK-sb.jpg);
-} */
 
 .hide {
   opacity: 0;
+}
+
+.cursor {
+  position: relative;
+  display: inline-block;
+  left: -0.2rem;
+  pointer-events: none;
+  width: 1rem;
+  height: 0.2rem;
+  background-color: var(--vp-c-text-1);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flyUp {
+  0% {
+    opacity: 0;
+    translate: 0 10rem;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 6rem;
+    line-height: 6rem;
+  }
+  .subtitle {
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 }
 </style>
