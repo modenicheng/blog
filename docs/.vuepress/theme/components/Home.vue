@@ -539,8 +539,17 @@ const router = useRouter();
     line-height: 6rem;
   }
   .subtitle {
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+  }
+
+  .text {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .cursor {
+    width: 0.7rem;
   }
 }
 </style>
