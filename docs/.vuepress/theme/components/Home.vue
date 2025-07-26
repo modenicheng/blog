@@ -2,15 +2,21 @@
 import type { ThemeHomeConfigBase } from "vuepress-theme-plume";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useDarkMode } from "vuepress-theme-plume/client";
+
+// three.js
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import Stats from "three/addons/libs/stats.module.js";
+
+// custom
+import { getThemeBg } from "../utils";
+import { get } from "http";
+
 
 const dark = useDarkMode();
 
 interface propData {
-  title: string;
-  subtitle: string;
-  description: string;
+  hero: any;
 }
 const props = defineProps<ThemeHomeConfigBase & propData>();
 
@@ -52,164 +58,70 @@ const getNDC = (x: number, y: number, canvas: HTMLCanvasElement) => {
     y: -((y - rect.top) / rect.height) * 2 + 1,
   };
 };
-const dotNum = 5;
-const dots: Dot[] = [];
-const tails: Tail[] = [];
-class Tail {
-  pos: THREE.Vector3;
-  mesh: THREE.Mesh;
-  lifetime: number;
-  totaltime: number;
-  color: {
-    r: number;
-    g: number;
-    b: number;
-  };
-  constructor(scene: THREE.Scene, lifetime: number = -1, pos: THREE.Vector3) {
-    this.pos = pos;
 
-    this.lifetime = lifetime;
-    this.totaltime = lifetime;
-
-    this.color = { r: 0, g: 0, b: 0 };
-
-    this.mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1, 12, 12),
-      new THREE.MeshBasicMaterial({
-        color: new THREE.Color(this.color.r, this.color.g, this.color.b),
-      })
-    );
-
-    this.mesh.position.copy(this.pos);
-    scene.add(this.mesh);
-  }
-
-  update(tailList: Tail[] | undefined = undefined) {
-    if (this.lifetime > 0) {
-      this.lifetime--;
-    } else if (this.lifetime === 0) {
-      this.mesh.parent?.remove(this.mesh);
-      if (tailList) {
-        tailList.splice(tailList.indexOf(this), 1);
-      }
-    }
-    this.setColor();
-    if (this.mesh.material instanceof THREE.MeshBasicMaterial) {
-      this.mesh.material.color.set(
-        new THREE.Color(this.color.r, this.color.g, this.color.b)
-      );
-      this.mesh.material.opacity = (this.lifetime / this.totaltime) * (dark.value ? 1 : 0.6);
-      this.mesh.material.transparent = true;
-      this.mesh.material.needsUpdate = true;
-      let scaleIndex = Math.sqrt(this.lifetime / this.totaltime);
-      this.mesh.scale.set(scaleIndex, scaleIndex, scaleIndex);
-    }
-  }
-
-  setColor() {
-    this.color.r = this.pos.x / 30 + 0.7 * (dark.value ? 1 : 1.2);
-    this.color.g = 0.05;
-    this.color.b = this.pos.y / 10 + 0.7 * (dark.value ? 1 : 1.2);
-  }
-}
-
-class Dot {
-  pos: THREE.Vector3;
-  vel: THREE.Vector3;
-  acc: THREE.Vector3;
+class DotLine {
+  pos1: THREE.Vector3; // 起始点
+  vec: THREE.Vector3; // 方向向量
   r: number;
-  mesh: THREE.Mesh;
-  life: number; // 存活时长（以帧为单位）-1则不计算存活时长。
-  color: {
-    r: number;
-    g: number;
-    b: number;
-  };
+  padding: number;
+  dotColor: THREE.Color;
+  lineColor: THREE.Color;
+  gap: number; //点与点之间的距离
 
-  constructor(scene: THREE.Scene, lifeTime: number = -1) {
-    this.pos = new THREE.Vector3(
-      THREE.MathUtils.randFloatSpread(window.innerWidth / 70),
-      THREE.MathUtils.randFloatSpread(window.innerHeight / 70),
-      THREE.MathUtils.randFloatSpread(20) + 30
-    );
-    this.vel = new THREE.Vector3(
-      THREE.MathUtils.randFloatSpread(0.1),
-      THREE.MathUtils.randFloatSpread(0.1),
-      THREE.MathUtils.randFloatSpread(0.1)
-      // 0
-    );
-    this.acc = new THREE.Vector3(0, 0, 0);
-    this.r = 0.1;
-
-    this.life = lifeTime;
-    this.color = { r: 0, g: 0, b: 0 };
-    this.setColor();
-    this.mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(this.r, 32, 32),
-      new THREE.MeshBasicMaterial({
-        color: new THREE.Color(this.color.r, this.color.g, this.color.b),
-      })
-    );
-    this.mesh.position.copy(this.pos);
-    scene.add(this.mesh);
-  }
-
-  setColor() {
-    this.color.r = this.pos.x / 30 + 0.7;
-    this.color.g = 0.05;
-    this.color.b = this.pos.y / 10 + 0.7;
-  }
-
-  update(worldPos: THREE.Vector3) {
-    this.calculateAcc(worldPos);
-    this.vel.add(this.acc);
-    this.pos.add(this.vel);
-    // this.acc.multiplyScalar(0);
-    this.mesh.position.copy(this.pos);
-    this.setColor();
-    if (this.mesh.material instanceof THREE.MeshBasicMaterial) {
-      this.mesh.material.color.set(
-        new THREE.Color(this.color.r, this.color.g, this.color.b)
-      );
-    }
-  }
-
-  calculateAcc(worldPos: THREE.Vector3) {
-    let x = this.calc(worldPos.x, this.pos.x) * k;
-    let y = this.calc(worldPos.y, this.pos.y) * k;
-    let z = this.calc(30, this.pos.z) * k;
-    // z = 0;
-    this.acc.set(x, y, z);
-  }
-
-  calc = (n1: number, n2: number): number => {
-    return (n1 - n2) * Math.abs(n1 - n2);
-    // return n1 - n2;
-    // return ((n1 - n2) * 1) / k;
-  };
-}
-const k = 0.00001;
-
-class HelpLine {
-  pos1: THREE.Vector3;
-  pos2: THREE.Vector3;
-  mesh: THREE.LineSegments;
-  constructor(scene: THREE.Scene, pos1: THREE.Vector3, pos2: THREE.Vector3) {
+  constructor(pos1: THREE.Vector3, vec: THREE.Vector3) {
     this.pos1 = pos1;
-    this.pos2 = pos2;
-    this.mesh = new THREE.LineSegments(
-      new THREE.BufferGeometry().setFromPoints([pos1, pos2]),
-      new THREE.LineBasicMaterial({ color: 0x888888 })
-    );
-    scene.add(this.mesh);
+    this.vec = vec;
+    this.r = 0.1;
+    this.padding = 0.5;
+    this.dotColor = new THREE.Color(0xffffff);
+    this.lineColor = new THREE.Color(0xaaffaa);
+    this.gap = 0.2;
   }
+}
 
-  update(pos1: THREE.Vector3, pos2: THREE.Vector3) {
-    this.mesh.geometry.setFromPoints([pos1, pos2]);
+class Line {
+  start: THREE.Vector3;
+  vec: THREE.Vector3;
+  len: number;
+  mesh: THREE.Line;
+  color: THREE.Color;
+
+  constructor(
+    start: THREE.Vector3,
+    vec: THREE.Vector3,
+    len: number,
+    color: THREE.Color = new THREE.Color(0x00ff00)
+  ) {
+    this.start = start;
+    this.vec = vec;
+    this.len = len;
+    this.color = color;
+
+    const geo = new THREE.BufferGeometry();
+
+    const deltaVector = vec.normalize().multiplyScalar(len);
+    const dx = deltaVector.x;
+    const dy = deltaVector.y;
+    const dz = deltaVector.z;
+
+    const vertices = new Float32Array([
+      start.x,
+      start.y,
+      start.z,
+      start.x + dx,
+      start.y + dy,
+      start.z + dz,
+    ]);
+    geo.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+    const mat = new THREE.LineBasicMaterial({ color: this.color });
+    this.mesh = new THREE.Line(geo, mat);
   }
 }
 
 const main = () => {
+  let statsDom = document.getElementById("fps");
+  let logDom = document.getElementById("log");
+
   const renderer = new THREE.WebGLRenderer({
     canvas: canvasRef.value!,
     antialias: true,
@@ -222,53 +134,87 @@ const main = () => {
   const fov = 70;
   const aspect = window.innerWidth / window.innerHeight;
   const near = 0.1;
-  const far = 200;
+  const far = 500;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-
-  camera.position.set(-10, 0, 50);
+  // camera.position.set(30, 30, 30);
+  camera.position.set(0, 0, 30);
 
   const scene = new THREE.Scene();
   scene.background = null; // 透明背景
 
-  // const controls = new OrbitControls(camera, renderer.domElement);
-  // controls.enableDamping = true;
-
-  for (let i = 0; i < dotNum; i++) {
-    dots.push(new Dot(scene));
+  const x = new Line(
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(1, 0, 0),
+    20,
+    new THREE.Color(0xff0000)
+  );
+  if (debug.value) {
+    const y = new Line(
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 1, 0),
+      20,
+      new THREE.Color(0x00ff00)
+    );
+    const z = new Line(
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, 1),
+      20,
+      new THREE.Color(0x0000ff)
+    );
+    scene.add(x.mesh, y.mesh, z.mesh);
   }
 
-  // traceDot 直接跟随鼠标
-  // const traceDot = new Dot(scene);
-  // traceDot.vel.set(0, 0, 0);
-  // traceDot.pos.set(0, 0, 0);
-  // traceDot.mesh.scale.set(0.02, 0.02, 0.02);
-  // dots.push(traceDot);
+  //
 
-  const tailDomLog = document.getElementById("tail");
-  let fps = 0;
-  let lastTime = performance.now();
-  let frameCount = 0;
-  let fpsDom = document.getElementById("fps");
+  const fog = new THREE.Fog(getThemeBg().bg, 0, 500);
+  scene.fog = fog;
 
-  const tailDot = dots[0];
+  //
+  const lines: Line[] = [];
+  const gapX = 50;
+  const gapY = 50;
+  const gapZ = 50;
+  const range = 10;
+  for (let i = range; i > -range; i--) {
+    for (let j = range; j > -range; j--) {
+      const l = new Line(
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0, 0, -1),
+        750,
+        new THREE.Color(0xaaaaaa)
+      );
+      l.mesh.position.set(i * gapX, j * gapY, 150);
+      lines.push(l);
+      scene.add(l.mesh);
+    }
+  }
+
+  //
+
+  let controls: OrbitControls;
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  if (orbitControlsStatus) {
+    controls.enabled = true;
+  } else {
+    controls.enabled = false;
+  }
+
+  const stats = new Stats();
+  if (statsDom) statsDom.appendChild(stats.dom);
 
   const canvas = renderer.domElement;
-  const ndc = getNDC(mouseX, mouseY, canvas);
-  const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.7).unproject(camera);
+  let lastBgColor:string = getThemeBg().bg;
 
-  const l = new HelpLine(scene, tailDot.pos, worldPos);
   const animate = () => {
-    // 帧率统计
-    frameCount++;
-    // controls.update();
-    const now = performance.now();
-    if (now - lastTime >= 1000) {
-      fps = frameCount / ((now - lastTime) / 1000);
-      lastTime = now;
-      frameCount = 0;
-      if (!fpsDom) fpsDom = document.getElementById("fps");
-      if (fpsDom) fpsDom.innerText = `FPS: ${fps.toFixed(1)}`;
-    }
+    renderer.render(scene, camera);
+
+    // 镜头移动控制
+    if (controls && orbitControlsStatus) controls.update();
+
+    // stats
+    stats.update();
 
     // 每帧都自适应窗口
     const width = window.innerWidth;
@@ -282,34 +228,26 @@ const main = () => {
       camera.updateProjectionMatrix();
     }
     const ndc = getNDC(mouseX, mouseY, canvas);
-    const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.7).unproject(camera);
+    const worldPos = new THREE.Vector3(ndc.x, ndc.y, 0.5).unproject(camera);
+    const scale = 1;
+    camera.position.set(worldPos.x * scale, worldPos.y * scale, 30);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    // traceDot 直接跟随鼠标
-    // traceDot.pos.copy(worldPos);
-    // traceDot.mesh.position.copy(traceDot.pos);
-
-    for (let i = 0; i < dots.length; i++) {
-      dots[i].update(worldPos);
-      tails.push(new Tail(scene, 400, dots[i].pos));
+    // 处理背景
+    
+    let bg = getThemeBg().bg;
+    if (lastBgColor !== bg) {
+      lastBgColor = bg;
+      fog.color = new THREE.Color(bg);
     }
-
-    for (let i = 0; i < tails.length; i++) {
-      tails[i].update();
-    }
-    // tails.push(new Tail(scene, 400, tailDot.pos));
-
-    l.update(tailDot.pos, worldPos);
-
-    // const points = [tailDot.pos, traceDot.pos];
-
-    // const geo = new THREE.BufferGeometry().setFromPoints(points);
-
-    // const mat = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-    // const line = new THREE.Line(geo, mat);
-    // scene.add(line);
 
     // logger
-    tailDomLog!.innerHTML = `
+    if (logDom) {
+      logDom!.innerHTML = `
+    screenPos:
+    ${mouseX}
+    ${mouseY}
+    <br />
     NDC:
     ${ndc.x.toFixed(3)}
     ${ndc.y.toFixed(3)}
@@ -319,33 +257,37 @@ const main = () => {
     ${worldPos.y.toFixed(3)}
     ${worldPos.z.toFixed(3)}
     <br />
-    acc:
-    ${tailDot.acc.x.toFixed(10)}
-    ${tailDot.acc.y.toFixed(10)}
+    cameraPos:
+    ${camera.position.x.toFixed(3)}
+    ${camera.position.y.toFixed(3)}
+    ${camera.position.z.toFixed(3)}
     <br />
-    vel:
-    ${tailDot.vel.x.toFixed(10)}
-    ${tailDot.vel.y.toFixed(10)}
+    cameraRotation:
+    ${camera.rotation.x.toFixed(3)}
+    ${camera.rotation.y.toFixed(3)}
+    ${camera.rotation.z.toFixed(3)}
     <br />
-    pos:
-    ${tailDot.pos.x.toFixed(10)}
-    ${tailDot.pos.y.toFixed(10)}
+    cameraUp:
+    ${camera.up.x.toFixed(3)}
+    ${camera.up.y.toFixed(3)}
+    ${camera.up.z.toFixed(3)}
+    <br />
     `;
-
-    renderer.render(scene, camera);
-    // requestAnimationFrame(animate);
-  };
-  renderer.setAnimationLoop((now) => {
-    if (now - lastT >= INTERVAL) {
-      lastT = now;
-      animate();
+    } else {
+      logDom = document.getElementById("log");
     }
-  });
+  };
+
+  renderer.setAnimationLoop(animate);
 };
 
-const FPS = 60; // 目标帧率
+const FPS = 240; // 目标帧率
 const INTERVAL = 1000 / FPS; // 每帧间隔 ms
 let lastT = performance.now();
+
+//
+const orbitControlsStatus = false;
+const debug = ref(true);
 </script>
 <template>
   <div>
@@ -353,12 +295,12 @@ let lastT = performance.now();
       :class="['home-canvas', dark ? 'dark-bg' : 'light-bg']"
       ref="canvasRef"
     />
-    <div class="fps hide" id="fps"></div>
-    <div class="data hide">
-      {{ mouse }}
-      <div id="tail" class="hide"></div>
+    <div v-show="debug" :class="['fps']" id="fps"></div>
+    <div v-show="debug" :class="['data']">
+      <div id="log">
+      
+      </div>
     </div>
-    <div>{{ props }}</div>
   </div>
 </template>
 
@@ -377,20 +319,26 @@ let lastT = performance.now();
 .data {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
+  z-index: 40;
   pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.533);
+  color: rgb(255, 255, 255);
+  padding: 1rem;
+  text-align: end;
+  font-family: monospace;
 }
 /* 帧率显示样式 */
 .fps {
-  position: fixed;
+  position: absolute;
   top: 8px;
   right: 16px;
-  color: #0f0;
+  /* color: #0f0;
   font-size: 18px;
   font-family: monospace;
   text-shadow: 0 0 4px #000;
   z-index: 10;
-  pointer-events: none;
+  pointer-events: none; */
 }
 /* .dark-bg {
   background-image: url(https://img-host.modenc.top/blog/113702964_p0.png);
@@ -400,6 +348,6 @@ let lastT = performance.now();
 } */
 
 .hide {
-  display: none;
+  opacity: 0;
 }
 </style>
