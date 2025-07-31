@@ -50,3 +50,8 @@ NVCUDA64.DLL    32.0.15.7657    NVIDIA CUDA 12.9.76 driver
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 ```
 
+剩余环境不变，最终成功运行。
+
+Edit：
+
+\*仙舟粗口\*写完才发现，官方提供了支持50系显卡的整合包，但是没放到 Assets 里，而是在 Release 文本中——不好好看 Release 的结果。。。
