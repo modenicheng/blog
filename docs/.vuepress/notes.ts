@@ -19,7 +19,7 @@
  *
  * 通过 `defineNoteConfig` 定义的 note 配置，应该填入 `defineNotesConfig` 的 notes 数组中
  */
-import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
+import { defineNoteConfig, defineNotesConfig } from "vuepress-theme-plume";
 
 // const demoNote = defineNoteConfig({
 //   dir: 'demo',
@@ -34,17 +34,31 @@ import { defineNoteConfig, defineNotesConfig } from 'vuepress-theme-plume'
 // })
 
 const opsNote = defineNoteConfig({
-  dir: 'Ops',
-  link: '/ops',
+  dir: "Ops",
+  link: "/ops",
   sidebar: [
     {
-      text: '运维 / Operations',
-      items: [
-        'zsh-configure',
-      ]
+      text: "运维 / Operations",
+      items: ["zsh-configure"],
     },
   ],
-})
+});
+
+const courseNote = defineNoteConfig({
+  dir: "course",
+  link: "/course",
+  // sidebar: "auto",
+  sidebar: [
+    { text: "线性代数 / Linear Algebra",
+      prefix: "linear-algebra",
+      // link: "/linear-algebra",
+      items: [
+        { text: "一、矩阵", prefix: "一、矩阵", items: "auto"}
+      ],
+     },
+    { text: "数学分析 / Mathematical Analysis" },
+  ],
+});
 
 /**
  * 导出所有的 note
@@ -52,7 +66,7 @@ const opsNote = defineNoteConfig({
  * （DemoNote 为参考示例，如果不需要它，请删除）
  */
 export default defineNotesConfig({
-  dir: 'notes',
-  link: '/',
-  notes: [opsNote],
-})
+  dir: "notes",
+  link: "/",
+  notes: [opsNote, courseNote],
+});

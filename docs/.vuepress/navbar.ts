@@ -16,6 +16,7 @@ export default defineNavbarConfig([
     text: '笔记',
     items: [
       { text: '运维 / Ops', link: '/ops/' },
+      { text: '大学课程 / Course', link: '/course/' },
     ]
   },
 ])
