@@ -56,6 +56,11 @@ const courseNote = defineNoteConfig({
         { text: "一、矩阵", prefix: "一、矩阵", items: "auto"}
       ],
      },
+     {
+      text: "C语言程序设计 / C Language Programming",
+      prefix: "clang-programming",
+      items: "auto"
+     },
     { text: "数学分析 / Mathematical Analysis" },
   ],
 });
