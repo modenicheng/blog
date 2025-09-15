@@ -16,4 +16,4 @@ permalink: /course/i4ud2qr2/
 
 ### MOOC
 
-<https://www.icourse163.org/>
+<https://www.icourse163.org/spoc/course/BIT-1474013162>
