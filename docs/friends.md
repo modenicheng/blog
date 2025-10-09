@@ -13,6 +13,11 @@ groups:
         avatar: https://image.honahec.cc/avatar.png
         description: Honahec's Blog
         link: https://blog.honahec.cc
+      
+      - name: RedBoy
+        link: www.redboooy.top
+        avatar: https://img-host.modenc.top/blog/wrf_profile.jpg
+        desc: 按M安轨
     
   - title: 项目
     desc: 还没想好放啥，先占个坑
