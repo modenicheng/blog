@@ -15,7 +15,7 @@ groups:
         link: https://blog.honahec.cc
       
       - name: RedBoy
-        link: www.redboooy.top
+        link: http://www.redboooy.top
         avatar: https://img-host.modenc.top/blog/wrf_profile.jpg
         desc: 按M安轨
     
