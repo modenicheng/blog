@@ -25,13 +25,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.9.1
 
       - name: Install dependencies
         run: npm install -g corepack
-        
+
       - run: corepack enable
 
       - run: yarn
@@ -41,7 +43,7 @@ jobs:
 
       - name: Compress
         run: cd ./docs/.vuepress && tar -zcvf ./dist.tar.gz ./dist
-      
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
@@ -50,6 +52,3 @@ jobs:
           # A file, directory or wildcard pattern that describes what to upload
           path: ./docs/.vuepress/dist.tar.gz
           # The desired behavior if no files are found using the provided path.
-    
-          
-      
