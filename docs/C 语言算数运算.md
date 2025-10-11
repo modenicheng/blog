@@ -2,6 +2,8 @@
 title: C 语言算数运算
 createTime: 2025/09/23 20:59:46
 permalink: /article/1grfrpg4/
+tags:
+    - C
 ---
 
 ## 四则运算
