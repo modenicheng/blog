@@ -2,7 +2,7 @@
 title: git 文件移动与重命名
 createTime: 2025/10/12 22:48:36
 permalink: /blog/h7l3gpse/
-cover: https://cdn.modenc.top/s-sh-5182-randimg-1258813047/113254881_p0.png
+cover: https://cdn.modenc.top/s-sh-5182-randimg-1258813047/83774126_p0.jpg
 coverStyle:
     compact: true
 tags:
