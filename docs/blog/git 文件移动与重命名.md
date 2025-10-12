@@ -5,6 +5,8 @@ permalink: /blog/h7l3gpse/
 cover: https://cdn.modenc.top/s-sh-5182-randimg-1258813047/83774126_p0.jpg
 coverStyle:
     compact: true
+    ratio: '2:1'
+    width: 300
 tags:
     - git
 ---
