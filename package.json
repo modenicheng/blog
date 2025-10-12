@@ -18,16 +18,16 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
-    "@vuepress/bundler-vite": "2.0.0-rc.23",
+    "@vuepress/bundler-vite": "2.0.0-rc.24",
     "http-server": "^14.1.1",
     "typescript": "^5.8.3",
     "vue": "^3.5.17",
-    "vuepress": "2.0.0-rc.23",
-    "vuepress-theme-plume": "1.0.0-rc.156"
+    "vuepress": "2.0.0-rc.24",
+    "vuepress-theme-plume": "1.0.0-rc.170"
   },
   "dependencies": {
-    "@types/three": "^0.178.1",
-    "@vuepress/shiki-twoslash": "2.0.0-rc.110",
+    "@types/three": "^0.180.0",
+    "@vuepress/shiki-twoslash": "2.0.0-rc.112",
     "artplayer": "^5.2.3",
     "chart.js": "^4.5.0",
     "corepack": "^0.33.0",
@@ -36,6 +36,6 @@
     "flowchart.ts": "^3.0.1",
     "mermaid": "^11.8.1",
     "pyodide": "^0.28.0",
-    "three": "^0.178.0"
+    "three": "^0.180.0"
   }
 }

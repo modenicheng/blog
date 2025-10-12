@@ -1,9 +1,10 @@
 ---
 title: CTF 初探：来自上科大同学的求助
 createTime: 2025/09/20 10:40:33
-permalink: /article/noeu6vz4/
+permalink: /blog/noeu6vz4/
 tags:
   - CTF
+  - 逆向
 ---
 ## 题目
 

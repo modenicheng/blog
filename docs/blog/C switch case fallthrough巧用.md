@@ -1,7 +1,7 @@
 ---
 title: C switch case fallthrough 巧用
 createTime: 2025/10/12 00:19:53
-permalink: /article/h8cwhmki/
+permalink: /blog/h8cwhmki/
 tags:
  - C
  - fallthrough
@@ -101,7 +101,7 @@ int main()
         m += 12;
     }
 
-    // 计算公式来源：https://blog.csdn.net/whz_zb/article/details/7425260
+    // 计算公式来源：https://blog.csdn.net/whz_zb/blog/details/7425260
     // 第四节：基姆拉尔森计算公式（据 blog 作者说这是他命名的）
     int weekday = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7 + 1;
     weekday = weekday == 7 ? 0 : weekday;

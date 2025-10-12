@@ -1,7 +1,7 @@
 ---
 title: MSST WebUI 部署在较新GPU上所遇到的问题
 createTime: 2025/07/31 08:49:23
-permalink: /article/cb1exuhr/
+permalink: /blog/cb1exuhr/
 tags:
     - AI
     - torch

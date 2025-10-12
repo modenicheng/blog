@@ -1,7 +1,7 @@
 ---
 title: web 陀螺仪的使用
 createTime: 2025/07/26 17:47:31
-permalink: /article/r9g0s5o8/
+permalink: /blog/r9g0s5o8/
 tags:
   - 前端
   - 陀螺仪

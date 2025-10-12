@@ -13,6 +13,8 @@ import { viteBundler } from "@vuepress/bundler-vite";
 import { defineUserConfig } from "vuepress";
 import { plumeTheme } from "vuepress-theme-plume";
 
+import { collections } from "./collections";
+
 export default defineUserConfig({
   base: "/",
   lang: "zh-CN",
@@ -57,18 +59,18 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/config/basic/#blog
      */
     // blog: false, // 禁用博客
-    blog: {
-      postList: true, // 是否启用文章列表页
-      tags: true, // 是否启用标签页
-      archives: true, // 是否启用归档页
-      categories: true, // 是否启用分类页
-      postCover: "right", // 文章封面位置
-      pagination: 15, // 每页显示文章数量
-      exclude: ["node_modules", ".vuepress", "docs/.vuepress", "friends.md"], // 排除的文件
-    },
+    // blog: {
+    //   postList: true, // 是否启用文章列表页
+    //   tags: true, // 是否启用标签页
+    //   archives: true, // 是否启用归档页
+    //   categories: true, // 是否启用分类页
+    //   postCover: "right", // 文章封面位置
+    //   pagination: 15, // 每页显示文章数量
+    //   exclude: ["node_modules", ".vuepress", "docs/.vuepress", "friends.md"], // 排除的文件
+    // },
 
     /* 博客文章页面链接前缀 */
-    article: "/article/",
+    article: "/blog/",
 
     /**
      * 编译缓存，加快编译速度
@@ -110,7 +112,7 @@ export default defineUserConfig({
       whitespace: true, // 启用 空格/Tab 高亮
       highlightLines: true, // 启用 行高亮
       lineNumbers: true, // 启用行号
-      collapsedLines: true
+      // collapsedLines: true,
     },
 
     /* 文章字数统计、阅读时间，设置为 false 则禁用 */
@@ -181,15 +183,15 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/guide/features/comments/
      */
     comment: {
-      provider: 'Giscus', // "Artalk" | "Giscus" | "Twikoo" | "Waline"
+      provider: "Giscus", // "Artalk" | "Giscus" | "Twikoo" | "Waline"
       comment: true,
-      repo: 'modenicheng/blog',
-      repoId: 'R_kgDOPQko_w',
-      category: 'Announcements',
-      categoryId: 'DIC_kwDOPQko_84CwcFQ',
-      mapping: 'pathname',
+      repo: "modenicheng/blog",
+      repoId: "R_kgDOPQko_w",
+      category: "Announcements",
+      categoryId: "DIC_kwDOPQko_84CwcFQ",
+      mapping: "pathname",
       reactionsEnabled: true,
-      inputPosition: 'top',
+      inputPosition: "top",
     },
 
     /**
@@ -203,5 +205,7 @@ export default defineUserConfig({
      * @see https://theme-plume.vuejs.press/guide/features/encryption/
      */
     // encrypt: {},
+
+    collections: collections
   }),
 });

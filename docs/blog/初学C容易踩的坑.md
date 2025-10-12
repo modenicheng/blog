@@ -1,7 +1,7 @@
 ---
 title: 初学C容易踩的坑
 createTime: 2025/09/16 21:22:56
-permalink: /article/gih92jmb/
+permalink: /blog/gih92jmb/
 tags:
     - C
 ---
@@ -72,7 +72,7 @@ scanf("%d%d%d", a, b, c);
 
 。。。因为 `scanf()` 需要的是变量的引用。就是加了 `&` 的变量。
 
-### 正解
+### 正解'
 
 ```c
 int a, b, c;

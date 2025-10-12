@@ -52,9 +52,10 @@ const courseNote = defineNoteConfig({
     { text: "线性代数 / Linear Algebra",
       prefix: "linear-algebra",
       // link: "/linear-algebra",
-      items: [
-        { text: "一、矩阵", prefix: "一、矩阵", items: "auto"}
-      ],
+      // items: [
+      //   { text: "一、矩阵", prefix: "一、矩阵", items: "auto"}
+      // ],
+      items: "auto"
      },
      {
       text: "C语言程序设计 / C Language Programming",

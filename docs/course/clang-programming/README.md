@@ -1,7 +1,7 @@
 ---
 title: C语言程序设计
 createTime: 2025/09/15 15:28:04
-permalink: /course/i4ud2qr2/
+permalink: /course/c-programming/
 ---
 
 ## 课程记分
