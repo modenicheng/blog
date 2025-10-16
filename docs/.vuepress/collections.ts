@@ -21,6 +21,11 @@ const collections: ThemeCollectionItem[] = [
         items: "auto",
       },
       { text: "数学分析 | Mathematical Analysis" },
+      {
+        text: "人工智能导论 | Introduction to Artificial Intelligence",
+        prefix: "introduction-to-artificial-intelligent",
+        items: "auto",
+      }
     ],
   },
 ];
