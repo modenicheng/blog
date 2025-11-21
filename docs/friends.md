@@ -5,8 +5,8 @@ groups:
   - title: 好友
     list:
       - name: 异想之旅
-        link: https://blog.yxzl.dev/
-        avatar: https://blog.yxzl.dev/head.png
+        link: https://yxzl.dev/
+        avatar: https://yxzl.dev/head.png
         desc: 异想之旅のBlog
 
       - name: 云朵角落
