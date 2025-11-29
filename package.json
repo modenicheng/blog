@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A site for documents and daily records.",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.12.0",
   "author": "modenicheng <cheng20070225@outlook.com>",
   "license": "MIT",
   "engines": {
@@ -18,16 +18,16 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
-    "@vuepress/bundler-vite": "2.0.0-rc.24",
+    "@vuepress/bundler-vite": "2.0.0-rc.26",
     "http-server": "^14.1.1",
     "typescript": "^5.8.3",
     "vue": "^3.5.17",
-    "vuepress": "2.0.0-rc.24",
-    "vuepress-theme-plume": "1.0.0-rc.170"
+    "vuepress": "2.0.0-rc.26",
+    "vuepress-theme-plume": "1.0.0-rc.179"
   },
   "dependencies": {
     "@types/three": "^0.180.0",
-    "@vuepress/shiki-twoslash": "2.0.0-rc.112",
+    "@vuepress/shiki-twoslash": "2.0.0-rc.118",
     "artplayer": "^5.2.3",
     "chart.js": "^4.5.0",
     "corepack": "^0.33.0",
@@ -36,6 +36,6 @@
     "flowchart.ts": "^3.0.1",
     "mermaid": "^11.8.1",
     "pyodide": "^0.28.0",
-    "three": "^0.180.0"
+    "three": "^0.181.2"
   }
 }

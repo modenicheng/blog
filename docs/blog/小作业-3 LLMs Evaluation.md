@@ -8,40 +8,51 @@ tags:
   - React
 ---
 
-这个是人工智能导论的小作业之三。感觉很有意思，所以记录一下。
+这个是人工智能导论的小作业之三。
 
 作业基本要求就是，选择不少于三个大模型进行多方面的评测。正好，前段时间 Gemini 3 Beta 放出来了，立刻对它进行一个测评。
+很巧合的是， TraeCN SOLO Coder 也正式上线了。所以，就把它们一块测了吧。
 
-因此，我们有了如下的测评：
+**本文并非在完成整个评测作业后编写，而是与评测进度同步推进**。因此，文中会有诸多左右脑互搏的内容，请仔细甄别（）
 
 ## **目标模型**
 
-- DeepSeek-Chat
-- DeepSeek-R1
-- Doubao-
-- Gemini 3 Pro
-- Kimi-K2
-- Qwen3-Max
-- ***我也不知道是什么的*** TraeCN SOLO Coder 神秘的自动选择（？
+- DeepSeek R1
+- DeepSeek V3
+- Doubao Sees 1.6
+- Doubao Seed 1.6 Thinking
+- Gemini 3 Pro Preview
+- Kimi K2 Turbo
+- Kimi K2 Thinking Turbo
+- Qwen3 Max
+- ***我也不知道是什么的*** TraeCN SOLO Coder（？
+- ***最后不得不用的*** Cline + DeepSeek V3
 
 > [!WARNING]
 > TraeCN 不与上面的所有模型参与同级评测。本次测评由于时间 / 技术问题，代码整体架构将完全交由 TraeCN SOLO Coder 进行开发。
 >
 > 可以将其视为不同于直接对话的另一种评测。
+>
+> ---
+>
+> EDIT：TraeCN 用完回来了，寄了，改用 Cline 和 VSCode 重写了（）
 
-让我本地跑这些模型显然很不现实。所以，本次测试会使用到如下平台提供的服务：
+让我本地跑这些模型显然很不现实。所以，本次测试会使用到以下平台提供的服务：
 
 - DeepSeek 开放平台 <https://platform.deepseek.com/>
 - 阿里云百炼 <https://bailian.console.aliyun.com/>
 - Moonshot AI 开放平台 <https://platform.moonshot.cn/>
-- 火山方舟管理控制台 <https://console.volcengine.com/ark>
+- 火山方舟 <https://console.volcengine.com/ark>
 - Google AI Studio <https://aistudio.google.com/>
 
-## **LLMs 批量评测 前端构建**
+此外，由于笔者宁可花数小时写一个批量发送 Prompts 的工具也不想直接 Ctrl C / V 在一大堆浏览器窗口里复制粘贴，所以我们需要一个能够批量发送 Prompts
+的小工具。预期做一个纯前端的工具，所有会话数据和用户配置全部存储于浏览器本地存储。
+
+## **LLMs 批量评测工具 前端构建**
 
 刚才提到，本次测评所用的项目将会是 TraeCN SOLO Coder 这个 Agent（应该算吧？）主导进行构建的。这是我使用的提示词。
 
-```markdown
+```markdown :collapsed-lines
 开发一个基于 React+TypeScript 的多 LLM 模型横向测评工具，采用 Mantine UI 组件库和 Yarn 包管理器构建纯前端工程。该工具应满足以下详细规范和技术要求：
 
 ### 1. 项目架构与技术栈
@@ -88,7 +99,7 @@ tags:
 - 实现分层数据存储策略：
   * 使用localStorage存储用户界面配置、最近使用的模型组合及临时测评结果
   * 使用IndexedDB存储完整的测评历史记录、详细性能数据及模型配置文件
- 
+
 - 实现完整的数据管理功能：
   * 提供数据备份与恢复功能
   * 支持按时间范围、模型类型筛选历史记录
@@ -146,12 +157,12 @@ tags:
 ![难绷报错](https://img-host.modenc.top/blog/PixPin_2025-11-26_23-37-19.png)
 这个问题我推测，一方面是因为训练数据中混杂了大量的老旧代码，而一旦使用新版本的依赖，就会导致冲突。另一方面就还是幻觉导致的。
 
-另外，AI 构建大项目的时候还有另一个通病，那就是很严重的记忆瓶颈——写着写着就忘了自己要干什么了。
+另外，AI 构建大项目的时候还有另一个通病，那就是很严重的记忆瓶颈 —— 写着写着就忘了自己要干什么了。
 即使像是 Cline 和 TraeCN SOLO Coder 这种带有一个 TODOLIST 的 Agent 还会忘事儿，何况普通的 AI 呢。
 
 在执行整个构建工程中，可以注意到，TraeCN SOLO Coder 由于上下文太长而败下阵来，不得不进行 tokens 压缩工作。
-这相当于把之前所有的上下文进行总结，抛弃细节信息，依次缩减 tokens 总量。然而这样做的问题也很明显：
-它立刻读取了一遍之前读过的一个文件。这是当前 Agent 的一个缺点，比较严重地造成了tokens 浪费。
+这相当于把之前所有的上下文进行总结，抛弃细节信息，依次缩减 tokens 总量。这是一个延长 Agent 对话长度的好办法。
+然而这样做的问题也很明显：它立刻读取了一遍之前读过的一个文件。这个缺点较严重地造成了tokens 浪费。
 
 然而，最大的问题是它完不成任务！！现在它的页面是长这样的：
 ![唐诗啊](https://img-host.modenc.top/blog/PixPin_2025-11-27_00-49-48.png)
@@ -164,13 +175,15 @@ tags:
 import '@mantine/core/styles.css';
 ```
 
-。。。我真无语了，就这一行，明晃晃写在文档里，这 *** AI 就是不知道往项目里写。
+。。。我真无语了，就这一行，明晃晃写在文档里，这 ** AI 就是不知道往项目里写。至于为什么 AI 没有注意到，暂未有定论。
+有可能是因为上下文过长导致模型注意力被分散掉了。
 
-哎不管了，总之好歹有个 UI 用了：
+哎不管了，好歹有个 UI 用了：
 ![说实在的，只是能用罢了](https://img-host.modenc.top/blog/PixPin_2025-11-27_01-06-48.png)
 但是其实 UI 问题还是挺大的……
 
 比如不同界面标题字体大小不一样、提示框位置对齐等等……总之还有极大的优化空间。
+UI 性能也堪忧，我实在难以想象为什么切换页面需要加载上百毫秒……
 
 > [!NOTE]
 > 此时，本项目自开始已经过去了 2h。这也只是刚把所有的 UI 写完。
@@ -187,3 +200,205 @@ import '@mantine/core/styles.css';
 
 现在项目的前端 UI 部分已经接近完成，现在需要实现 配置管理 调用 和 存储的逻辑。检查整个工作区，并完成上述任务
 ```
+
+```markdown
+对项目中的各个功能模块执行全面测试，识别并修复所有功能缺陷。针对每个模块，需设计并执行单元测试、集成测试和端到端测试，确保所有功能点符合需求规格。同时，重点检查用户界面(UI)元素与后端功能逻辑之间的交互对接问题，包括但不限于数据传递、状态同步、事件响应等方面，定位并修复所有界面与功能不匹配的异常情况。测试过程中需记录详细的测试用例、缺陷报告及修复方案，确保修复后的功能在各种边界条件下仍能稳定运行。
+```
+
+> [!NOTE]
+> 这第二段提示词是因为模型根本就记不得去做测试，所以只能单独给一段让它运行测试的 prompts 。
+
+---
+
+#### 不得已使用 VSCode & Cline & DeepSeek Chat
+
+经过数小时的 Vibe Coding，好不容易实现对各模型的调用。然而，此时整个评测记录模块仍然不能工作，模型输出不能被正确显示。
+又调试了很久，最后 Trae 写了个死循环，把我浏览器卡死了。。。所以这东西 ~~看起来~~ 并不靠谱 ——
+只要项目复杂度到达一定程度之后，AI 记忆过短导致的各种问题就显露无疑了。由于这坨 AI 写出来的石山我实在是改不动了，
+遂立刻使用 Vue3 + TS + Vuetify 重写了一个项目。
+
+经过反思，我认为出问题的地方主要在两点：一个是 TraeCN 背后的豆包模型太菜了，代码能力肯定比不过 ds / qwen ；
+另一个是我写的提示词太长、具体信息模糊不清且涉及内容过多，在大模型记忆有限的情况下导致相当多具体问题被忽略掉了。
+
+TraeCN SOLO Coder 的失败经历使得接下来我的写代码策略有了很大改变。一方面，不再完全依赖 Agent 创建完整项目，全手动创建项目并初始化
+UI 框架和基础的本地持久化存储 (`localForage`) 和路由管理插件 (`vue-router@4`) 。另一方面，在项目推进过程中，不再把一整个项目的所有功能
+一股脑丢给 AI ，而是按照功能模块逐步实现。这使得整体项目进度更加可控，也避免了 AI 记忆过短的问题，可以保证 AI 生成代码的质量。
+
+又经过约 4h，新的基于 Vue3 的评测前端工具接近完成，终于可以进入正题 —— 对各个 LLM 的详细测评。
+
+![录制的时候掉链子这一块](https://img-host.modenc.top/blog/PixPin_2025-11-28_19-06-02.gif)
+
+> [!NOTE]
+> EDIT：工具已公网部署在 <https://llms-eval.modenc.top/> ，欢迎访问
+>
+> 声明：本工具不提供任何模型文本生成服务，若要使用请自行到各个服务商申请 API Key 以调用服务
+
+## **各家大模型评测**
+
+### **各模型基础参数**
+
+::: table maxContent=true
+
+<table>
+  <thead>
+    <tr>
+      <th>服务商</th>
+      <th>模型名称</th>
+      <th>模型版本</th>
+      <th>模型ID</th>
+      <th>能力</th>
+      <th>参数量</th>
+      <th>上下文长度</th>
+      <th>输出长度(不包含思维链长度)</th>
+      <th>输入价格</th>
+      <th>输出价格</th>
+      <th>缓存命中价格</th>
+      <th>缓存存储价格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">DeepSeek 开放平台</td>
+      <td>deepseek-V3</td>
+      <td rowspan="2">DeepSeek-V3.2-Exp</td>
+      <td>deepseek-chat</td>
+      <td>仅非思考</td>
+      <td rowspan="2">685B</td>
+      <td rowspan="2">128k</td>
+      <td>默认 4K，最大 8K</td>
+      <td rowspan="2">2 元/M Tokens</td>
+      <td rowspan="2">3 元/M Tokens</td>
+      <td rowspan="2">0.2 元/M Tokens</td>
+      <td rowspan="2">-</td>
+    </tr>
+    <tr>
+      <td>deepseek-R1</td>
+      <td>deepseek-reasonor</td>
+      <td>仅思考</td>
+      <td>默认 32K，最大 64K</td>
+    </tr>
+    <tr>
+      <td rowspan="3">火山方舟</td>
+      <td>doubao-seed-1.6</td>
+      <td>251015</td>
+      <td>doubao-seed-1-6-251015</td>
+      <td>思考/非思考</td>
+      <td rowspan="3">-</td>
+      <td rowspan="3">256k</td>
+      <td rowspan="3">32k 默认 4k</td>
+      <td rowspan="3" colspan="3">阶梯计价</td>
+      <td rowspan="3" >0.017 元/M Tokens</td>
+    </tr>
+    <tr>
+      <td>doubao-seed-1.6-flash</td>
+      <td>250828</td>
+      <td>doubao-seed-1-6-flash-250828</td>
+      <td>思考/非思考</td>
+    </tr>
+    <tr>
+      <td>doubao-seed-1.6-thinking</td>
+      <td>250715</td>
+      <td>doubao-seed-1-6-thinking-250715</td>
+      <td>仅思考</td>
+    </tr>
+    <tr>
+      <td rowspan="5">月之暗面</td>
+      <td rowspan="2">kimi-k2-preview</td>
+      <td>0905</td>
+      <td>kimi-k2-0905-preview</td>
+      <td rowspan="2">仅非思考</td>
+      <td>-</td>
+      <td>256k</td>
+      <td>-</td>
+      <td>1.00 元/M Tokens</td>
+      <td>16.00 元/M Tokens</td>
+      <td>4.00 元/M Tokens</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>0711</td>
+      <td>kimi-k2-0711-preview</td>
+      <td>1T(总)/32B(激活)</td>
+      <td>128k</td>
+      <td>-</td>
+      <td>1.00 元/M Tokens</td>
+      <td>16.00 元/M Tokens</td>
+      <td>4.00 元/M Tokens</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>kimi-k2-turbo-preview</td>
+      <td>-</td>
+      <td>kimi-k2-turbo-preview</td>
+      <td>仅非思考</td>
+      <td>-</td>
+      <td>256k</td>
+      <td>-</td>
+      <td>1.00 元/M Tokens</td>
+      <td>58.00 元/M Tokens</td>
+      <td>8.00 元/M Tokens</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>kimi-k2-thinking</td>
+      <td>-</td>
+      <td>kimi-k2-thinking</td>
+      <td>仅思考</td>
+      <td>-</td>
+      <td>256k</td>
+      <td>-</td>
+      <td>1.00 元/M Tokens</td>
+      <td>16.00 元/M Tokens</td>
+      <td>4.00 元/M Tokens</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>kimi-k2-thinking-turbo</td>
+      <td>-</td>
+      <td>kimi-k2-thinking-turbo</td>
+      <td>仅思考</td>
+      <td>-</td>
+      <td>256k</td>
+      <td>-</td>
+      <td>1.00 元/M Tokens</td>
+      <td>58.00 元/M Tokens</td>
+      <td>8.00 元/M Tokens</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>阿里云百炼</td>
+      <td>qwen3-max</td>
+      <td>稳定版</td>
+      <td>qwen3-max</td>
+      <td>仅非思考</td>
+      <td>-</td>
+      <td>256k</td>
+      <td>32k</td>
+      <td colspan="4">阶梯计价</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Google AI Studio</td>
+      <td rowspan="2">gemini-3-pro-preview</td>
+      <td rowspan="2">Beta</td>
+      <td rowspan="2">gemini-3-pro-preview</td>
+      <td rowspan="2">仅思考, 可调整思考强度</td>
+      <td rowspan="2">-</td>
+      <td rowspan="2">1M</td>
+      <td rowspan="2">64k</td>
+      <td>$2 / M Tokens (&lt200k tokens)</td>
+      <td>$12 / M Tokens (&lt200k tokens)</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>$4 / M Tokens (&gt200k tokens)</td>
+      <td>$18 / M Tokens (&gt200k tokens)</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+
+:::
+
+### **评测角度设计**

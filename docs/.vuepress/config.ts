@@ -44,9 +44,9 @@ export default defineUserConfig({
     // copyright: 'CC-BY-4.0',
 
     /* 文档仓库配置，用于 editLink */
-    // docsRepo: '',
-    // docsDir: 'docs',
-    // docsBranch: '',
+    docsRepo: 'https://github.com/modenicheng/blog',
+    docsDir: 'docs',
+    docsBranch: 'master',
 
     /* 页内信息 */
     editLink: true,
@@ -170,6 +170,20 @@ export default defineUserConfig({
          */
       }, // 在 Markdown 文件中导入其他 markdown 文件内容
       imageSize: "local", // 启用 自动填充 图片宽高属性，避免页面抖动
+      table: {
+        // 表格默认对齐方式 'left' | 'center' | 'right'
+        align: 'left',
+        // 表格宽度是否为最大内容宽度
+        // 行内元素不再自动换行，超出容器宽度时表格显示滚动条
+        maxContent: false,
+        // 表格宽度默认占据整行
+        // fullWidth: false,
+        /**
+         * 复制为 html/markdown
+         * true 相当于 `all`，相当于同时启用 html 和 markdown
+         */
+        copy: true, // true | 'all' | 'html' | 'md'
+      }
     },
 
     /**
@@ -206,6 +220,6 @@ export default defineUserConfig({
      */
     // encrypt: {},
 
-    collections: collections
+    collections: collections,
   }),
 });
