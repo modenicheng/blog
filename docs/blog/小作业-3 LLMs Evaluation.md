@@ -2,10 +2,10 @@
 title: 人工智能导论 Midterm Project - LLMs Evaluation
 createTime: 2025/11/26 22:41:30
 permalink: /blog/wtn59ea4/
-draft: true
+# draft: true
 tags:
   - AI
-  - React
+  - LLM
 ---
 
 这个是人工智能导论的小作业之三。
@@ -594,6 +594,8 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 对于 **指令遵循** 这个指标，选择这两个数据集的原因是二者测试的角度并不一样，一个侧重模型在多轮指令下的遵循能力，对模型的记忆能力也有一定要求；
 而另一个则更加侧重多样的指令，能够更全面评测模型在单轮指令下的遵循情况。
 
+这两个数据集的评测方式是基于模式匹配的，而不是裁判大模型进行评测。
+
 ##### **事实回答**
 
 **Chinese Simple QA** [^chinese_simple_qa]
@@ -605,6 +607,9 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 
 这个数据集评测方式采用大模型自动评测，即由另一个 LLM 比对参考答案和实际推理得到的输出进行评分。每一条样本最终得分可能是 `0` 或 `1`，
 最终得分是所有样本得分的均值。
+
+这种评测方式的好处是，对于有参考答案的样本可以减少误判。比如本次测评使用的一个样本，它的参考答案给的是 `单步骤反应` 。但是所有模型回答的都是 `基元反应` 。
+显然，这只是同一个事物的两种不同表述，如果直接使用关键字提取则会误判。而裁判大模型则正确地判断出二者是等价的，正确地给几个参与评测的模型输出打了分。
 
 ##### **代码能力**
 
@@ -634,12 +639,27 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 或许可以按照下面的公式重新对模型进行打分：
 
 $$
-\text{score} = \frac{f_{pass} - i_{pass}}{i_{pass}}
+\begin{equation}
+\text{score} = \frac{f_{pass} - i_{pass}}{total - i_{pass}}
+\end{equation}
 $$
+
+其中，$f_{pass}$ 是应用 AI 的更改后通过的检查点个数；$i_{pass}$ 是初始状态下代码评测能够通过的检查点个数；$total$ 是检查点的总量；
+通过归一化 AI 改动前后检查点通过的比例来记分，可以比较客观地反应 AI 的编程能力。
+
+其实，如果用“全部通过记 1 分”“任意检查点不通过则记 0 分”这种方式统计，则在评测的四个 LLMs 中，没有一个模型的分数能够超过 0.4 分，
+成绩都非常惨淡。
 
 ##### **数理推理**
 
 **math_500** [^math-500]
+
+这同样是一个缩减的数据集，原数据集是 MATH 。MATH-500 从其中挑选了不同层次的共计 500 道数学题，这些题目必须经过多步严谨的推理才能正确得出结果。
+
+这 500 道数学题被分入 Level 1-5 共五个不同等级的子数据集，难度从 Level 1 到 Level 5 难度递增。
+
+评测采用模式匹配（pattern match）的方式提取答案。输入的提示词中包含输出格式相关指令，比如让 AI 把答案放到 `\box{}` 这种东西里。
+随后就可以直接通过程序把 AI 的答案提取出来。
 
 ##### **价值观对齐**
 
@@ -658,7 +678,9 @@ $$
 - 隐私与财产 `Privacy_And_Property`
 - 道德 `Ethics_And_Morality`
 
-测试包含了所有的这七个子集。需要说明的是
+测试包含了所有的这七个子集。
+
+本数据集由于回答是开放的，所以必须使用裁判大模型进行评测。
 
 #### **评测流程**
 
@@ -935,9 +957,9 @@ $$
         - ...
   :::
 
-#### **评测结果**
+#### **评测结果** :construction:
 
-这部分会对评测结果进行展示和分析。该说不说这把评测观察到了很多有意思的现象
+这部分会对评测结果进行展示和分析。该说不说这把评测观察到了很多有意思的现象。:construction:
 
 ##### **评测概览**
 
@@ -1192,5 +1214,9 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
   display: block;
   text-wrap: nowrap;
   overflow-x: auto
+}
+.katex-display {
+  display: block;
+  overflow-x: clip;
 }
 </style>
