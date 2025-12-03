@@ -1,0 +1,90 @@
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "mean_prompt_level_strict",
+      "mean_inst_level_strict",
+      "mean_prompt_level_loose",
+      "mean_inst_level_loose"
+    ],
+    "datasets": [
+      {
+        "label": "Metric Scores",
+        "data": [
+          0.9062,
+          0.9479,
+          0.9219,
+          0.9635
+        ],
+        "backgroundColor": [
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)"
+        ],
+        "borderColor": [
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)"
+        ],
+        "borderWidth": 2
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "deepseek-reasoner-v3.2 on IFEval - Metric Comparison",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top"
+      },
+      "tooltip": {
+        "enabled": true,
+        "mode": "index",
+        "intersect": false
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "category",
+        "display": true,
+        "grid": {
+          "display": false
+        }
+      },
+      "y": {
+        "type": "linear",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Score",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": true,
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "min": 0,
+        "max": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "type": "radar",
+  "data": {
+    "labels": [
+      "default"
+    ],
+    "datasets": [
+      {
+        "label": "qwen3-max - mean_acc",
+        "data": [
+          0.22
+        ],
+        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+        "borderColor": "rgb(54, 162, 235)",
+        "borderWidth": 2,
+        "fill": true,
+        "pointBackgroundColor": "rgb(54, 162, 235)",
+        "pointBorderColor": "#fff",
+        "pointHoverBackgroundColor": "#fff",
+        "pointHoverBorderColor": "rgb(54, 162, 235)"
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "qwen3-max on SWE-bench_Verified_mini - mean_acc",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top"
+      }
+    },
+    "scales": {
+      "r": {
+        "angleLines": {
+          "display": true,
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "pointLabels": {
+          "font": {
+            "size": 12
+          },
+          "color": "#666"
+        },
+        "suggestedMin": 0,
+        "suggestedMax": 1.0
+      }
+    }
+  }
+}

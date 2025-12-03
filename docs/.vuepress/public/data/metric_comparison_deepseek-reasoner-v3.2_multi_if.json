@@ -1,0 +1,122 @@
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "mean_turn_1_prompt_level_strict",
+      "mean_turn_1_inst_level_strict",
+      "mean_turn_1_prompt_level_loose",
+      "mean_turn_1_inst_level_loose",
+      "mean_turn_2_prompt_level_strict",
+      "mean_turn_2_inst_level_strict",
+      "mean_turn_2_prompt_level_loose",
+      "mean_turn_2_inst_level_loose",
+      "mean_turn_3_prompt_level_strict",
+      "mean_turn_3_inst_level_strict",
+      "mean_turn_3_prompt_level_loose",
+      "mean_turn_3_inst_level_loose"
+    ],
+    "datasets": [
+      {
+        "label": "Metric Scores",
+        "data": [
+          0.8203,
+          0.8724,
+          0.8438,
+          0.8854,
+          0.6953,
+          0.8607,
+          0.75,
+          0.8906,
+          0.6172,
+          0.8647,
+          0.7266,
+          0.9043
+        ],
+        "backgroundColor": [
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)"
+        ],
+        "borderColor": [
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)"
+        ],
+        "borderWidth": 2
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "deepseek-reasoner-v3.2 on Multi-IF - Metric Comparison",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top"
+      },
+      "tooltip": {
+        "enabled": true,
+        "mode": "index",
+        "intersect": false
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "category",
+        "display": true,
+        "grid": {
+          "display": false
+        }
+      },
+      "y": {
+        "type": "linear",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Score",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": true,
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "min": 0,
+        "max": 1.0
+      }
+    }
+  }
+}

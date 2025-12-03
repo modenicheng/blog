@@ -1,0 +1,194 @@
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "中华文化",
+      "人文与社会科学",
+      "工程、技术与应用科学",
+      "生活、艺术与文化",
+      "社会",
+      "自然与自然科学"
+    ],
+    "datasets": [
+      {
+        "label": "deepseek-reasoner-v3.2",
+        "data": [
+          0.6406,
+          0.75,
+          0.7656,
+          0.6406,
+          0.6719,
+          0.7031
+        ],
+        "backgroundColor": "#FF638422",
+        "borderColor": "#FF6384FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FF6384FF",
+        "hoverBorderColor": "#FF6384FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "deepseek-reasoner-v3.2-exp",
+        "data": [
+          0.6094,
+          0.7031,
+          0.7188,
+          0.5938,
+          0.6562,
+          0.6719
+        ],
+        "backgroundColor": "#36A2EB33",
+        "borderColor": "#36A2EBFF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#36A2EBFF",
+        "hoverBorderColor": "#36A2EBFF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "deepseek-reasoner-v3.2-special",
+        "data": [
+          0.7031,
+          0.75,
+          0.8281,
+          0.625,
+          0.6406,
+          0.7188
+        ],
+        "backgroundColor": "#FFCE5622",
+        "borderColor": "#FFCE56FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FFCE56FF",
+        "hoverBorderColor": "#FFCE56FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "doubao-seed-1-6-251015",
+        "data": [
+          0.625,
+          0.8281,
+          0.75,
+          0.6094,
+          0.6094,
+          0.7188
+        ],
+        "backgroundColor": "#4BC0C033",
+        "borderColor": "#4BC0C0FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#4BC0C0FF",
+        "hoverBorderColor": "#4BC0C0FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "qwen-plus",
+        "data": [
+          0.7188,
+          0.9375,
+          0.8906,
+          0.8438,
+          0.8906,
+          0.7969
+        ],
+        "backgroundColor": "#9966FF22",
+        "borderColor": "#9966FFFF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#9966FFFF",
+        "hoverBorderColor": "#9966FFFF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "qwen3-max",
+        "data": [
+          0.7812,
+          0.9531,
+          0.875,
+          0.9062,
+          0.8906,
+          0.8594
+        ],
+        "backgroundColor": "#FF9F4033",
+        "borderColor": "#FF9F40FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FF9F40FF",
+        "hoverBorderColor": "#FF9F40FF",
+        "hoverBorderWidth": 3
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": false,
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Model Performance Across Datasets",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top",
+        "labels": {
+          "font": {
+            "size": 12
+          }
+        }
+      },
+      "datalabels": {
+        "display": true,
+        "color": "#333",
+        "font": {
+          "size": 11,
+          "weight": "bold"
+        },
+        "anchor": "end",
+        "formatter": "function(value) { return value !== null ? value.toFixed(4) : 'N/A'; }",
+        "backgroundColor": "rgba(255, 255, 255, 0.7)",
+        "borderRadius": 3,
+        "padding": 4
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "category",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Subsets",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": false,
+          "color": "rgba(100, 100, 100, 0.1)"
+        }
+      },
+      "y": {
+        "type": "linear",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Score (Mean Acc)",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": true,
+          "color": "rgba(100, 100, 100, 0.1)"
+        },
+        "min": 0,
+        "max": 1.0,
+        "ticks": {
+          "display": true
+        }
+      }
+    },
+    "aspectRatio": 2.0
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "type": "radar",
+  "data": {
+    "labels": [
+      "Unfairness_And_Discrimination",
+      "Crimes_And_Illegal_Activities",
+      "Insult",
+      "Mental_Health",
+      "Physical_Harm",
+      "Privacy_And_Property",
+      "Ethics_And_Morality"
+    ],
+    "datasets": [
+      {
+        "label": "qwen-plus - mean_acc",
+        "data": [
+          0.85,
+          0.9219,
+          0.6825,
+          0.9688,
+          0.8281,
+          0.75,
+          0.7969
+        ],
+        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+        "borderColor": "rgb(54, 162, 235)",
+        "borderWidth": 2,
+        "fill": true,
+        "pointBackgroundColor": "rgb(54, 162, 235)",
+        "pointBorderColor": "#fff",
+        "pointHoverBackgroundColor": "#fff",
+        "pointHoverBorderColor": "rgb(54, 162, 235)"
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "qwen-plus on General-QA - mean_acc",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top"
+      }
+    },
+    "scales": {
+      "r": {
+        "angleLines": {
+          "display": true,
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "pointLabels": {
+          "font": {
+            "size": 12
+          },
+          "color": "#666"
+        },
+        "suggestedMin": 0,
+        "suggestedMax": 1.0
+      }
+    }
+  }
+}

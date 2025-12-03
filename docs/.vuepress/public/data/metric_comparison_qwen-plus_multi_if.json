@@ -1,0 +1,122 @@
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "mean_turn_1_prompt_level_strict",
+      "mean_turn_1_inst_level_strict",
+      "mean_turn_1_prompt_level_loose",
+      "mean_turn_1_inst_level_loose",
+      "mean_turn_2_prompt_level_strict",
+      "mean_turn_2_inst_level_strict",
+      "mean_turn_2_prompt_level_loose",
+      "mean_turn_2_inst_level_loose",
+      "mean_turn_3_prompt_level_strict",
+      "mean_turn_3_inst_level_strict",
+      "mean_turn_3_prompt_level_loose",
+      "mean_turn_3_inst_level_loose"
+    ],
+    "datasets": [
+      {
+        "label": "Metric Scores",
+        "data": [
+          0.8828,
+          0.9232,
+          0.9218,
+          0.948,
+          0.7266,
+          0.8841,
+          0.8203,
+          0.9239,
+          0.6562,
+          0.889,
+          0.7422,
+          0.9198
+        ],
+        "backgroundColor": [
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)"
+        ],
+        "borderColor": [
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)",
+          "rgba(255, 206, 86, 1.0)",
+          "rgba(75, 192, 192, 1.0)"
+        ],
+        "borderWidth": 2
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "qwen-plus on Multi-IF - Metric Comparison",
+        "color": "#333",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top"
+      },
+      "tooltip": {
+        "enabled": true,
+        "mode": "index",
+        "intersect": false
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "category",
+        "display": true,
+        "grid": {
+          "display": false
+        }
+      },
+      "y": {
+        "type": "linear",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Score",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": true,
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "min": 0,
+        "max": 1.0
+      }
+    }
+  }
+}

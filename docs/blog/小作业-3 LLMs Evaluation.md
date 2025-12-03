@@ -49,7 +49,7 @@ tags:
 的小工具。预期做一个纯前端的工具，所有会话数据和用户配置全部存储于浏览器本地存储。正如上文所说，我们认为让它们作为 Agent 开发一套软件也算评测，
 所以接下来我们就进行第一类评测。
 
-## **评测一、Agent 前端构建**
+## **Agent 试水：前端构建 · Try It Out**
 
 刚才提到，本次测评所用的项目将会是 TraeCN SOLO Coder 这个 Agent（应该算吧？）主导进行构建的。这是我使用的提示词。
 
@@ -377,7 +377,7 @@ TraeCN 中也有出现，且出现频次略高于 DeepSeek Chat 。考虑到模�
 
 尽管如此，在这里依旧把它列入评测，是因为这项指标对于用户体验是至关重要的。
 
-## **评测二、大模型横评**
+## 正式评测 · 导语
 
 为了尽可能覆盖足够真实的使用场景和用户体验，同时兼顾标准模型性能评测，模型批量评测也会分成两部分。第一部分是 **标准评测** 。
 这部分评测将借助开源数据集和评测框架进行。受限于成本问题，标准评测仅针对 DeepSeek-R1、 Doubao、qwen-plus 和 Q 进行。
@@ -548,7 +548,92 @@ TraeCN 中也有出现，且出现频次略高于 DeepSeek Chat 。考虑到模�
   </tbody>
 </table>
 
-### **标准评测 · Benchmarks**
+2025.12.3 EDIT:
+
+这天凌晨得知 12.1 日 Deepseek 把 API 版本更新到正式版了，这导致我不能判断到底当时测的是实验模型 Deepseek-V3.2-Exp
+还是正式模型 Deepseek-V3.2 。所以直接重新在 12.3 日重新测试了这个模型。另外，这次限时开放了一个 special 模型，
+顺道测了。这个 sepcial api 限时开放，错过就只能自己部署了。来得早不如来得巧，一起测了。
+
+现将 12.3 日时，Deepseek 官网提供的表格摘录如下，以供参阅。
+
+<table style="text-align: center;">
+  <thead>
+    <tr>
+      <th colspan="2" style="text-align: center;">模型</th>
+      <th>deepseek-chat</th>
+      <th>deepseek-reasoner</th>
+      <th>deepseek-reasoner<sup>(1)</sup></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">BASE URL</td>
+      <td colspan="2"><a href="https://api.deepseek.com" target="_blank" rel="noopener noreferrer">https://api.deepseek.com</a></td>
+      <td>
+        <a href="https://api.deepseek.com/v3.2_speciale_expires_on_20251215" target="_blank" rel="noopener noreferrer">
+        https://api.deepseek.com/<br>
+        v3.2_speciale_expires_on_20251215
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align: center;">模型版本</td>
+      <td>DeepSeek-V3.2<br>（非思考模式）</td>
+      <td>DeepSeek-V3.2<br>（思考模式）</td>
+      <td>DeepSeek-V3.2-Speciale<br>（只支持思考模式）</td>
+    </tr>
+    <tr>
+      <td colspan="2">上下文长度</td>
+      <td colspan="3">128K</td>
+    </tr>
+    <tr>
+      <td colspan="2">输出长度</td>
+      <td>默认 4K，最大 8K</td>
+      <td>默认 32K，最大 64K</td>
+      <td>默认 128K，最大 128K</td>
+    </tr>
+    <tr>
+      <td rowspan="4">功能</td>
+      <td><a href="/zh-cn/guides/json_mode">Json Output</a></td>
+      <td>支持</td>
+      <td>支持</td>
+      <td>不支持</td>
+    </tr>
+    <tr>
+      <td><a href="/zh-cn/guides/tool_calls">Tool Calls</a></td>
+      <td>支持</td>
+      <td>支持</td>
+      <td>不支持</td>
+    </tr>
+    <tr>
+      <td><a href="/zh-cn/guides/chat_prefix_completion">对话前缀续写（Beta）</a></td>
+      <td>支持</td>
+      <td>支持</td>
+      <td>不支持</td>
+    </tr>
+    <tr>
+      <td><a href="/zh-cn/guides/fim_completion">FIM 补全（Beta）</a></td>
+      <td>支持</td>
+      <td>不支持</td>
+      <td>不支持</td>
+    </tr>
+      <tr>
+      <td rowspan="3">价格</td>
+      <td>百万tokens输入（缓存命中）</td>
+      <td colspan="3">0.2元</td>
+    </tr>
+    <tr>
+      <td>百万tokens输入（缓存未命中）</td>
+      <td colspan="3">2元</td>
+    </tr>
+    <tr>
+      <td>百万tokens输出</td>
+      <td colspan="3">3元</td>
+    </tr>
+  </tbody>
+</table>
+
+## **基准测试 · Benchmarks**
 
 这部分将使用 Evalscope [^evalscope] 进行对单个模型的评测。你可以去它的官方仓库瞅一眼。
 
@@ -557,28 +642,28 @@ TraeCN 中也有出现，且出现频次略高于 DeepSeek Chat 。考虑到模�
 > [!IMPORTANT]
 > 本次评测所有脚本部署环境是 Ubuntu 24.04 Server ，Windows 10 / 11 部署方式会有所区别。请读者注意这一点。
 
-#### **评测设计**
+### **评测设计**
 
 下面详细说明评测指标的设计和数据集的选择。
 
 整体上来讲，本次评测主要聚焦于 ==以中文语境为主== 的条件下，大语言模型在下面五个角度的各项水平。
 
-##### **指令遵循**
+#### **指令遵循**
 
-**Multi IF** [^multi-if]
+##### **Multi IF**
 
 <RepoCard repo="facebookresearch/Multi-IF" />
 
-此数据集旨在评测大语言模型遵循 **多语言、多轮指令** 的能力。由于本次测评整体语言环境仅限于中文和少量英文，因此我们只使用这个数据集的中文和英文子集。
+Multi IF [^multi-if]旨在评测大语言模型遵循 **多语言、多轮指令** 的能力。由于本次测评整体语言环境仅限于中文和少量英文，因此我们只使用这个数据集的中文和英文子集。
 
 _趣事一则：在编写这一段的时候（2025.12.2），打开 GitHub 仓库就显示 Multi IF 被存档（archive）了，_
 _而在选数据集的时候它还没 archived （_
 
-**IFEval** [^ifeval]
+##### **IFEval**
 
 <RepoCard repo="google-research/google-research" />
 
-IFEval 是一个用于评估指令跟随型语言模型的基准，侧重于测试模型理解和响应各类提示的能力。它包含**多样化的任务和指标**，以全面评估模型性能。[^evalscope-docs-llms]
+IFEval [^ifeval] 是一个用于评估指令跟随型语言模型的基准，侧重于测试模型理解和响应各类提示的能力。它包含**多样化的任务和指标**，以全面评估模型性能。[^evalscope-docs-llms]
 
 此数据集侧重于 **可以（被程序轻易）验证的指令**。它使用九类共 25 种不同的可验证指标来评测模型的输出结果。
 如：
@@ -596,13 +681,13 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 
 这两个数据集的评测方式是基于模式匹配的，而不是裁判大模型进行评测。
 
-##### **事实回答**
+#### **事实回答**
 
-**Chinese Simple QA** [^chinese_simple_qa]
+##### **Chinese Simple QA**
 
 <RepoCard repo="LivingFutureLab/ChineseSimpleQA" />
 
-这是一个中文问答数据集，数据多样，覆盖六个维度，每个维度细分多个领域。如在 `中华文化` 维度下又分为
+Chinese Simple QA [^chinese_simple_qa] 是一个中文问答数据集，数据多样，覆盖六个维度，每个维度细分多个领域。如在 `中华文化` 维度下又分为
 `艺术与表演` `历史与文学` `信仰与哲学` `民俗传统` 等四个领域。
 
 这个数据集评测方式采用大模型自动评测，即由另一个 LLM 比对参考答案和实际推理得到的输出进行评分。每一条样本最终得分可能是 `0` 或 `1`，
@@ -611,13 +696,13 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 这种评测方式的好处是，对于有参考答案的样本可以减少误判。比如本次测评使用的一个样本，它的参考答案给的是 `单步骤反应` 。但是所有模型回答的都是 `基元反应` 。
 显然，这只是同一个事物的两种不同表述，如果直接使用关键字提取则会误判。而裁判大模型则正确地判断出二者是等价的，正确地给几个参与评测的模型输出打了分。
 
-##### **代码能力**
+#### **代码能力**
 
-**SWE Bench Verified Mini** [^swe-bench]
+##### **SWE Bench Verified Mini**
 
 <RepoCard repo="mariushobbhahn/SWEBench-verified-mini" />
 
-这个数据集包含 50 个实际编程样例，从 SWE Bench Verified 数据集中精挑细选得来，确保这个小样本可以很好地代表整个大样本。
+SWE Bench Verified Mini [^swe-bench] 这个数据集包含 50 个实际编程样例，从 SWE Bench Verified 数据集中精挑细选得来，确保这个小样本可以很好地代表整个大样本。
 数据集作者详细地进行了评测，以确保缩减后的数据集与原数据集效果相近。
 
 此数据集基本评测方法是，给出一段有问题的代码，并给出一个错误描述，让模型生成一个修复后的代码。要求 AI 使用 git apply 的格式生成代码改动，
@@ -650,24 +735,24 @@ $$
 其实，如果用“全部通过记 1 分”“任意检查点不通过则记 0 分”这种方式统计，则在评测的四个 LLMs 中，没有一个模型的分数能够超过 0.4 分，
 成绩都非常惨淡。
 
-##### **数理推理**
+#### **数理推理**
 
-**math_500** [^math-500]
+##### **MATH-500**
 
-这同样是一个缩减的数据集，原数据集是 MATH 。MATH-500 从其中挑选了不同层次的共计 500 道数学题，这些题目必须经过多步严谨的推理才能正确得出结果。
+这同样是一个缩减的数据集，原数据集是 MATH [^math-500]。MATH-500 从其中挑选了不同层次的共计 500 道数学题，这些题目必须经过多步严谨的推理才能正确得出结果。
 
 这 500 道数学题被分入 Level 1-5 共五个不同等级的子数据集，难度从 Level 1 到 Level 5 难度递增。
 
 评测采用模式匹配（pattern match）的方式提取答案。输入的提示词中包含输出格式相关指令，比如让 AI 把答案放到 `\box{}` 这种东西里。
 随后就可以直接通过程序把 AI 的答案提取出来。
 
-##### **价值观对齐**
+#### **价值观对齐**
 
-**Safety Prompts** [^safety-prompts]
+##### **Safety Prompts**
 
 <RepoCard repo="thu-coai/Safety-Prompts" />
 
-这个数据集中下属两个大类，一个是本次评测使用的 `typical_safety_scenarios`（典型的安全场景），另一个是 `instruction_attack_senarios.json`
+Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本次评测使用的 `typical_safety_scenarios`（典型的安全场景），另一个是 `instruction_attack_senarios.json`
 （指令攻击）。而在 `typical_safety_scenarios` 中包含了七个子集，分为：
 
 - 歧视与偏见 `Unfairness_And_Discrimination`
@@ -682,7 +767,7 @@ $$
 
 本数据集由于回答是开放的，所以必须使用裁判大模型进行评测。
 
-#### **评测流程**
+### **评测流程**
 
 ::: steps
 
@@ -889,7 +974,11 @@ $$
   并且还会再有一个新的按照时间命名的目录，导致后期难以整理数据。
 
   指定后一个参数之后，评测框架会根据指定目录下的文件自动推断哪些评测未完成并接着完成剩余评测，而不会从头再来一遍。
-  一般和第一个参数保持一致即可。 **非常推荐填写这两个参数**
+  一般和第一个参数保持一致即可。 **非常推荐填写这两个参数**。
+
+  ==**EDIT 2025-12-3**==：还有一个今天刚汲取教训用上的参数，叫作 `stream`。设置 `stream=True` 可以让模型流式输出，
+  也就是生成多少就立刻增量返回新生成的 Token 。这种传输方式可以避免因为模型思考时间过长导致的 HTTP Timeout 错误。
+  之前评测总是莫名其妙终止就是这个原因导致的。加上 `stream=True` 可以避免评测意外中断。**这个参数也非常推荐填写**。
 
 - 评测运行
 
@@ -957,11 +1046,11 @@ $$
         - ...
   :::
 
-#### **评测结果** :construction:
+### **评测结果** :construction:
 
 这部分会对评测结果进行展示和分析。该说不说这把评测观察到了很多有意思的现象。:construction:
 
-##### **评测概览**
+#### **评测概览**
 
 ::: chartjs
 
@@ -979,36 +1068,58 @@ $$
     ],
     "datasets": [
       {
-        "label": "deepseek-reasoner",
+        "label": "deepseek-reasoner V3.2 EXP",
         "data": [0.808, 0.6589, 0.99, 0.8984, 0.9062, 0.26],
-        "backgroundColor": "#e980fc33",
-        "borderColor": "#ea80fcbb",
+        "backgroundColor": "#e74c3c22",
+        "borderColor": "#e74c3cbb",
+        "borderWidth": 1
+      },
+      {
+        "label": "deepseek-reasoner V3.2",
+        "data": [0.7924, 0.6953, 0.9866, 0.8203, 0.9062, 0.3000],
+        "backgroundColor": "#e67e2222",
+        "borderColor": "#e67e22bb",
+        "borderWidth": 1
+      },
+      {
+        "label": "deepseek-reasoner V3.2 SPECIAL",
+        "data": [0.7366, 0.7109, 0.9900, 0.7266, 0.9375, 0.2800],
+        "backgroundColor": "#f1c40f22",
+        "borderColor": "#f1c40fbb",
         "borderWidth": 1
       },
       {
         "label": "qwen3-max",
         "data": [0.8352, 0.8776, 0.9799, 0.8047, 0.8594, 0.22],
-        "backgroundColor": "#b388ff33",
-        "borderColor": "#b388ffbb",
+        "backgroundColor": "#34495e33",
+        "borderColor": "#34495ebb",
         "borderWidth": 1
       },
       {
         "label": "doubao-seed-1-6-251015",
         "data": [0.7991, 0.6901, 0.9565, 0.8125, 0.8281, 0.32],
-        "backgroundColor": "#536dfe33",
-        "borderColor": "#536dfebb",
+        "backgroundColor": "#9b59b622",
+        "borderColor": "#9b59b6bb",
         "borderWidth": 1
       },
       {
         "label": "qwen-plus",
         "data": [0.8284, 0.8464, 0.9766, 0.8828, 0.8906, 0.18],
-        "backgroundColor": "#00b0ff33",
-        "borderColor": "#00aeffbb",
+        "backgroundColor": "#2ecc7122",
+        "borderColor": "#2ecc71bb",
         "borderWidth": 1
       }
     ]
   }
 }
+```
+
+:::
+
+::: chartjs
+
+```json
+<!-- @include: ../.vuepress/public/data/merged_evaluation_data_pretty.json -->
 ```
 
 :::
@@ -1035,7 +1146,7 @@ $$
   </thead>
   <tbody>
     <tr>
-      <td>deepseek-reasoner</td>
+      <td>deepseek-reasoner V3.2 EXP</td>
       <td>0.8080</td>
       <td>0.6589</td>
       <td>0.9900</td>
@@ -1070,31 +1181,75 @@ $$
       <td>0.8906</td>
       <td>0.1800</td>
     </tr>
+    <tr>
+      <td>deepseek-reasoner V3.2</td>
+      <td>0.7924</td>
+      <td>0.6953</td>
+      <td>0.9866</td>
+      <td>0.8203</td>
+      <td>0.9062</td>
+      <td>0.3000</td>
+    </tr>
+    <tr>
+      <td>deepseek-reasoner V3.2 SPECIAL</td>
+      <td>0.7366</td>
+      <td>0.7109</td>
+      <td>0.9900</td>
+      <td>0.7266</td>
+      <td>0.9375</td>
+      <td>0.2800</td>
+    </tr>
   </tbody>
 </table>
 
-##### **成本统计** （向右滚动查看完整数据 :point_right: ）
+#### **Chinese Simple QA 评测结果**
 
-| 模型            | 输入（命中缓存）/ Token | 输入（未命中缓存）/ Token | 输出 / Token | 总计 / Token | 总成本         |
-| --------------- | ----------------------- | ------------------------- | ------------ | ------------ | -------------- |
-| Qwen3 Max       | 26112                   | 1810219                   | 833637       | 2669968      | ￥ 10.64752128 |
-| Deepseek R1     | 1321408                 | 1640963                   | 3337118      | 6299489      | ￥ 13.55       |
-| Qwen Plus       | 256                     | 1177105                   | 931733       | 2109094      | ￥ 3.036957760 |
-| Doubao Seed 1.6 | 未开启缓存              | 2074693                   | 2005799      | 4080492      | ￥ 15.66       |
-| Deepseek V3     | 2289216                 | 2412706                   | 4756         | 4706678      | ￥ 4.83        |
+::: chartjs
 
-> [!WARNING]
-> 评测中，由于 Deepseek R1 评测配置被错误地全部设置成了 LLM 自动评测，导致不得不重新评测。这导致了 Deepseek 两个模型开销偏大。
-> 实际上，Deepseek R1 一轮评测的开销约是表格中数据的一半。
+```json
+<!-- @include: ../.vuepress/public/data/chinese_simpleqa_merged_pretty.json-->
+```
 
-<!-- BREAK THE QUOTE BLOCK -->
+:::
+
+#### **成本统计** （向右滚动查看完整数据 :point_right: ）
 
 > [!NOTE]
 > 所有账单均以原价计入，不考虑 免费使用额度 / 折扣 / 资源包 等优惠。
 >
 > 所有最终成本均四舍五入至两位小数。
 
-### **主观评测 · Experience**
+| 模型              | 输入（命中缓存）/ Token | 输入（未命中缓存）/ Token | 输出 / Token | 总计 / Token | 总成本     |
+| ----------------- | ----------------------- | ------------------------- | ------------ | ------------ | ---------: |
+| qwen3-max         | 26112                   | 1810219                   | 833637       | 2669968      | ￥ 10.65   |
+| deepseek-reasoner | 1321408                 | 1640963                   | 3337118      | 6299489      | ￥ 13.55   |
+| qwen-plus         | 256                     | 1177105                   | 931733       | 2109094      | ￥  3.04   |
+| doubao-seed-1-6   | 未开启缓存              | 2074693                   | 2005799      | 4080492      | ￥ 15.66   |
+| deepseek-chat     | 2289216                 | 2412706                   | 4756         | 4706678      | ￥  4.83   |
+
+> [!WARNING]
+> 评测中，由于 deepseek-reasoner 评测配置被错误地全部设置成了 LLM 自动评测，导致不得不重新评测。这导致了 Deepseek 两个模型开销偏大。
+
+**EDIT**: 2025-12-3 重新测试了 Deepseek V3.2 和 Deepseek V3.2-SPECIAL。现将所有额外开销记录如下：
+
+| 模型              | 输入（命中缓存）/ Token | 输入（未命中缓存）/ Token | 输出 / Token | 总计 / Token | 总成本     |
+| ----------------- | ----------------------- | ------------------------- | ------------ | ------------ | ---------: |
+| deepseek-reasoner | 1710528                 | 1518785                   | 2770629      | 5999942      | ￥ 11.69   |
+| deepseek-chat     | 9984                    | 33818                     | 64           | 43866        | ￥  0.07   |
+
+在统计 deepseek-chat 的成本时，有一个很有趣的现象：这个模型输出 tokens 数量永远等于请求次数！
+
+这说明， deepseek-chat 很好地遵循了评分的提示词，每一次只输出 `A` 或 `B`
+来判断被测模型输出到底是对还是错。
+
+> [!NOTE]
+> 这一轮单独的评测同时跑了两个版本，一个是正式版 Deepseek-V3.2 ，另一个是特别版 Deepseek-V3.2-SPECIAL，
+> 由于 Deepseek 官方没有提供更加精细的调用日志与成本统计，所以只能把两个模型的成本计在一起。
+>
+> 其实可以通过错开二者评测时间的方式分别统计二者开销，不过由于时间关系（ddl是 11 号，再不推进度真要寄了）
+> 两个版本的模型就一起测了。
+
+## **主观评测 · Experience**
 
 ---
 
