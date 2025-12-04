@@ -1,1 +1,159 @@
-{"type": "bar", "data": {"labels": ["pass_to_pass.success"], "datasets": [{"label": "deepseek-reasoner-v3.2", "data": [770], "backgroundColor": "#FF638422", "borderColor": "#FF6384FF", "borderWidth": 2, "hoverBackgroundColor": "#FF6384FF", "hoverBorderColor": "#FF6384FF", "hoverBorderWidth": 3}, {"label": "deepseek-reasoner-v3.2-exp", "data": [846], "backgroundColor": "#36A2EB33", "borderColor": "#36A2EBFF", "borderWidth": 2, "hoverBackgroundColor": "#36A2EBFF", "hoverBorderColor": "#36A2EBFF", "hoverBorderWidth": 3}, {"label": "deepseek-reasoner-v3.2-special", "data": [1068], "backgroundColor": "#FFCE5622", "borderColor": "#FFCE56FF", "borderWidth": 2, "hoverBackgroundColor": "#FFCE56FF", "hoverBorderColor": "#FFCE56FF", "hoverBorderWidth": 3}, {"label": "doubao-seed-1-6-251015", "data": [1037], "backgroundColor": "#4BC0C033", "borderColor": "#4BC0C0FF", "borderWidth": 2, "hoverBackgroundColor": "#4BC0C0FF", "hoverBorderColor": "#4BC0C0FF", "hoverBorderWidth": 3}, {"label": "qwen-plus", "data": [1049], "backgroundColor": "#9966FF22", "borderColor": "#9966FFFF", "borderWidth": 2, "hoverBackgroundColor": "#9966FFFF", "hoverBorderColor": "#9966FFFF", "hoverBorderWidth": 3}, {"label": "qwen3-max", "data": [1288], "backgroundColor": "#FF9F4033", "borderColor": "#FF9F40FF", "borderWidth": 2, "hoverBackgroundColor": "#FF9F40FF", "hoverBorderColor": "#FF9F40FF", "hoverBorderWidth": 3}]}, "options": {"responsive": true, "maintainAspectRatio": false, "animation": {"duration": 1000, "easing": "easeOutQuart"}, "plugins": {"title": {"display": true, "text": "SWE-bench: Large Counts (100+ range)", "font": {"size": 18, "weight": "bold"}}, "legend": {"display": true, "position": "top", "labels": {"font": {"size": 12}}}, "tooltip": {"enabled": true, "mode": "index", "intersect": false, "callbacks": {"label": "function(context) { return context.dataset.label + ': ' + context.parsed.y; }", "title": "function(tooltipItems) { return 'Metric: ' + tooltipItems[0].label; }"}}, "datalabels": {"display": true, "font": {"size": 11, "weight": "bold"}, "anchor": "end", "align": "top", "formatter": "function(value) { return value !== null ? value.toFixed(4) : 'N/A'; }", "backgroundColor": "rgba(255, 255, 255, 0.7)", "borderRadius": 3, "padding": 4}}, "scales": {"x": {"type": "category", "display": true, "title": {"display": true, "text": "Metric", "color": "#666", "font": {"size": 14}}, "grid": {"display": false}, "ticks": {"maxRotation": 45, "minRotation": 45}}, "y": {"type": "linear", "display": true, "title": {"display": true, "text": "Count", "color": "#666", "font": {"size": 14}}, "grid": {"display": true}, "min": 0}}, "aspectRatio": 1.5}}
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "pass_to_pass.success"
+    ],
+    "datasets": [
+      {
+        "label": "deepseek-reasoner-v3.2",
+        "data": [
+          770
+        ],
+        "backgroundColor": "#FF638422",
+        "borderColor": "#FF6384FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FF6384FF",
+        "hoverBorderColor": "#FF6384FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "deepseek-reasoner-v3.2-exp",
+        "data": [
+          846
+        ],
+        "backgroundColor": "#36A2EB33",
+        "borderColor": "#36A2EBFF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#36A2EBFF",
+        "hoverBorderColor": "#36A2EBFF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "deepseek-reasoner-v3.2-special",
+        "data": [
+          1068
+        ],
+        "backgroundColor": "#FFCE5622",
+        "borderColor": "#FFCE56FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FFCE56FF",
+        "hoverBorderColor": "#FFCE56FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "doubao-seed-1-6-251015",
+        "data": [
+          1037
+        ],
+        "backgroundColor": "#4BC0C033",
+        "borderColor": "#4BC0C0FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#4BC0C0FF",
+        "hoverBorderColor": "#4BC0C0FF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "qwen-plus",
+        "data": [
+          1049
+        ],
+        "backgroundColor": "#9966FF22",
+        "borderColor": "#9966FFFF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#9966FFFF",
+        "hoverBorderColor": "#9966FFFF",
+        "hoverBorderWidth": 3
+      },
+      {
+        "label": "qwen3-max",
+        "data": [
+          1288
+        ],
+        "backgroundColor": "#FF9F4033",
+        "borderColor": "#FF9F40FF",
+        "borderWidth": 2,
+        "hoverBackgroundColor": "#FF9F40FF",
+        "hoverBorderColor": "#FF9F40FF",
+        "hoverBorderWidth": 3
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "maintainAspectRatio": false,
+    "animation": {
+      "duration": 1000,
+      "easing": "easeOutQuart"
+    },
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "SWE-bench: Large Counts (100+ range)",
+        "font": {
+          "size": 18,
+          "weight": "bold"
+        }
+      },
+      "legend": {
+        "display": true,
+        "position": "top",
+        "labels": {
+          "font": {
+            "size": 12
+          }
+        }
+      },
+      "datalabels": {
+        "display": true,
+        "font": {
+          "size": 11,
+          "weight": "bold"
+        },
+        "anchor": "end",
+        "align": "top",
+        "formatter": "function(value) { return value !== null ? value.toFixed(4) : 'N/A'; }",
+        "backgroundColor": "rgba(255, 255, 255, 0.7)",
+        "borderRadius": 3,
+        "padding": 4
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "category",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Metric",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": false
+        },
+        "ticks": {
+          "maxRotation": 45
+        }
+      },
+      "y": {
+        "type": "linear",
+        "display": true,
+        "title": {
+          "display": true,
+          "text": "Count",
+          "color": "#666",
+          "font": {
+            "size": 14
+          }
+        },
+        "grid": {
+          "display": true
+        },
+        "min": 0
+      }
+    },
+    "aspectRatio": 1.5
+  }
+}
