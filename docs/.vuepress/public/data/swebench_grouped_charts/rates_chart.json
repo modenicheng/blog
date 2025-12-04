@@ -2,13 +2,25 @@
   "type": "bar",
   "data": {
     "labels": [
-      "default"
+      "Accuracy Std Dev",
+      "Average Accuracy",
+      "Completion Rate",
+      "Patch Exists Rate",
+      "Patch Is None Rate",
+      "Patch Successfully Applied Rate",
+      "Resolution Rate"
     ],
     "datasets": [
       {
         "label": "deepseek-reasoner-v3.2",
         "data": [
-          0.9062
+          0.4629100498862757,
+          0.3,
+          0.5,
+          0.5,
+          0.0,
+          0.5,
+          0.3
         ],
         "backgroundColor": "#FF638422",
         "borderColor": "#FF6384FF",
@@ -20,7 +32,13 @@
       {
         "label": "deepseek-reasoner-v3.2-exp",
         "data": [
-          0.9062
+          0.44308749769345207,
+          0.26,
+          0.46,
+          0.46,
+          0.0,
+          0.46,
+          0.26
         ],
         "backgroundColor": "#36A2EB33",
         "borderColor": "#36A2EBFF",
@@ -32,7 +50,13 @@
       {
         "label": "deepseek-reasoner-v3.2-special",
         "data": [
-          0.9375
+          0.4535573676110727,
+          0.28,
+          0.46,
+          0.46,
+          0.0,
+          0.46,
+          0.28
         ],
         "backgroundColor": "#FFCE5622",
         "borderColor": "#FFCE56FF",
@@ -44,7 +68,13 @@
       {
         "label": "doubao-seed-1-6-251015",
         "data": [
-          0.8281
+          0.4712120714991612,
+          0.32,
+          0.6,
+          0.6,
+          0.0,
+          0.6,
+          0.32
         ],
         "backgroundColor": "#4BC0C033",
         "borderColor": "#4BC0C0FF",
@@ -56,7 +86,13 @@
       {
         "label": "qwen-plus",
         "data": [
-          0.8906
+          0.38808793449160356,
+          0.18,
+          0.5,
+          0.5,
+          0.0,
+          0.5,
+          0.18
         ],
         "backgroundColor": "#9966FF22",
         "borderColor": "#9966FFFF",
@@ -68,7 +104,13 @@
       {
         "label": "qwen3-max",
         "data": [
-          0.8594
+          0.4184519575964803,
+          0.22,
+          0.48,
+          0.48,
+          0.0,
+          0.48,
+          0.22
         ],
         "backgroundColor": "#FF9F4033",
         "borderColor": "#FF9F40FF",
@@ -89,7 +131,7 @@
     "plugins": {
       "title": {
         "display": true,
-        "text": "Model Performance on IFEval Subsets",
+        "text": "SWE-bench: Rates and Scores (0-1 range)",
         "font": {
           "size": 18,
           "weight": "bold"
@@ -105,17 +147,7 @@
         }
       },
       "datalabels": {
-        "display": true,
-        "font": {
-          "size": 11,
-          "weight": "bold"
-        },
-        "anchor": "end",
-        "align": "top",
-        "formatter": "function(value) { return value !== null ? value.toFixed(4) : 'N/A'; }",
-        "backgroundColor": "rgba(255, 255, 255, 0.7)",
-        "borderRadius": 3,
-        "padding": 4
+        "display": false
       }
     },
     "scales": {
@@ -124,7 +156,7 @@
         "display": true,
         "title": {
           "display": true,
-          "text": "Subset",
+          "text": "Metric",
           "color": "#666",
           "font": {
             "size": 14
@@ -132,6 +164,9 @@
         },
         "grid": {
           "display": false
+        },
+        "ticks": {
+          "maxRotation": 45
         }
       },
       "y": {
@@ -139,7 +174,7 @@
         "display": true,
         "title": {
           "display": true,
-          "text": "Score",
+          "text": "Rate / Score",
           "color": "#666",
           "font": {
             "size": 14
@@ -149,10 +184,7 @@
           "display": true
         },
         "min": 0,
-        "max": 1.0,
-        "ticks": {
-          "display": true
-        }
+        "max": 1.0
       }
     },
     "aspectRatio": 2.0

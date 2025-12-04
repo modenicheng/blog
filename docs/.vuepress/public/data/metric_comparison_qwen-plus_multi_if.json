@@ -111,8 +111,7 @@
           }
         },
         "grid": {
-          "display": true,
-          "color": "rgba(0, 0, 0, 0.1)"
+          "display": true
         },
         "min": 0,
         "max": 1.0
