@@ -121,7 +121,6 @@
       "title": {
         "display": true,
         "text": "Model Performance Across Datasets",
-        "color": "#333",
         "font": {
           "size": 18,
           "weight": "bold"
@@ -138,7 +137,6 @@
       },
       "datalabels": {
         "display": true,
-        "color": "#333",
         "font": {
           "size": 11,
           "weight": "bold"
