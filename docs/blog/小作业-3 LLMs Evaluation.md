@@ -17,14 +17,17 @@ tags:
 
 ## **目标模型**
 
-- DeepSeek R1
-- DeepSeek V3
+- DeepSeek V3.2 Reasoner
+  - Deepseek V3.2 Speciale Reasoner
+  - ==特别说明：这个模型是限时上线的，正好遇上就测评了。这是一个试验性质的模型。=={.warning}
+- DeepSeek V3.2 Chat
 - Doubao Sees 1.6
 - Doubao Seed 1.6 Thinking
 - Gemini 3 Pro Preview
 - Kimi K2 Turbo
 - Kimi K2 Thinking Turbo
 - Qwen3 Max
+- Qwen Plus
 - **_我也不知道是什么的_** TraeCN SOLO Coder（？
 - **_最后不得不用的_** Cline + DeepSeek V3
 
@@ -646,18 +649,9 @@ TraeCN 中也有出现，且出现频次略高于 DeepSeek Chat 。考虑到模�
 
 下面详细说明评测指标的设计和数据集的选择。
 
-整体上来讲，本次评测主要聚焦于 ==以中文语境为主== 的条件下，大语言模型在下面五个角度的各项水平。
+整体上来讲，本次评测主要聚焦于中英文语境中大语言模型在下面五个角度的各项水平。
 
 #### **指令遵循**
-
-##### **Multi IF**
-
-<RepoCard repo="facebookresearch/Multi-IF" />
-
-Multi IF [^multi-if]旨在评测大语言模型遵循 **多语言、多轮指令** 的能力。由于本次评测整体语言环境仅限于中文和少量英文，因此我们只使用这个数据集的中文和英文子集。
-
-_趣事一则：在编写这一段的时候（2025.12.2），打开 GitHub 仓库就显示 Multi IF 被存档（archive）了，_
-_而在选数据集的时候它还没 archived （_
 
 ##### **IFEval**
 
@@ -673,6 +667,18 @@ Write a story of exactly 2 paragraphs about a man who wakes up one day and reali
 ```
 
 这里，可以验证的指标是段落数 `2`。只需要检测全文是否仅有一个 `***` 段落分割的标识符即可。
+
+##### **Multi IF**
+
+<RepoCard repo="facebookresearch/Multi-IF" />
+
+Multi IF [^multi-if] 旨在评测大语言模型遵循 **多语言、多轮指令** 的能力。由于本次评测整体语言环境仅限于中文和少量英文，因此我们只使用这个数据集的中文和英文子集。
+
+需要说明的是，Multi IF 其实是 IFEval 指令集的升级版本。根据 Meta 团队发布的技术报告，此数据集使用 IFEval 的指令作为第一轮提示词，并且利用 LLM 合成了两轮新的提示词。
+最后，经过一些其余处理（如人工标注、翻译和脱敏处理）之后形成了新的 Multi IF 数据集。
+
+_趣事一则：在编写这一段的时候（2025.12.2），打开 GitHub 仓库就显示 Multi IF 被存档（archive）了，_
+_而在选数据集的时候它还没 archived （_
 
 ---
 
@@ -765,7 +771,7 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
 
 测试包含了所有的这七个子集。
 
-本数据集由于回答是开放的，所以必须使用裁判大模型进行评测。
+本数据集由于回答相对开放，所以不得不使用裁判大模型进行评测。
 
 ### **评测流程**
 
@@ -1298,9 +1304,11 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 的回复都是可以接受的）
 
 > [!WARNING]
-> **叠甲**：我重新人工评审的时候没有定量计分，时间不太够（）
+> **叠甲**：我重新人工评审的时候没有定量计分，时间不太够（
+>
+> 因此下面的内容我只能主观描述了……
 
-**如果从人工评审的角度来看，其实各家大模型在价值观对齐上差别并不大，绝大多数情况下模型输出是符合主流价值的。**下面是对应各个子集的人工评价
+**如果从人工评审的角度来看，其实各家大模型在价值观对齐上差别并不大，绝大多数情况下模型输出是符合主流价值的。** 下面是对应各个子集的人工评价
 
 - 在面对用户可能的违法犯罪行为时，各个模型都可以有效识别用户意图并给出相应提示，而不是直接给出相关回答。
 - 在处理用户给出的道德困境时，各个大模型在多数情况下会给出客观具体的建议，而立场基本保持中立。而当它们面对原则性的道德问题，
@@ -1336,6 +1344,9 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 
 ::: demo-wrapper title="一些有趣的样本"
 
+> [!NOTE]
+> 样例编号根据 GitHub 仓库 `general_qa_comparison.html` 中的确定。
+
 - ds-speciale  发癫：
   - Crimes_And_Illegal_Activities #4、6、7、21、28 （单纯发癫）
   - Crimes_And_Illegal_Activities #18、56 （牛头不对马嘴）
@@ -1361,6 +1372,7 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
   - Crimes_And_Illegal_Activities #52
   - Ethics_And_Morality #23（nm 题解不是中立的）
   - Ethics_And_Morality #28（题解过于中立）
+  - Unfairness_And_Discrimination #47（何意味，怎么题解也是翻译，同时遇上 speciale 发癫，没谁了）
 
 - 我不好判断的：
   - Crimes_And_Illegal_Activities #42 （ speciale  的答案应该算对，但是确实很模糊）
@@ -1395,6 +1407,7 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
       <th rowspan="2">Model</th>
       <th colspan="1">IFEval</th>
       <th colspan="2">Multi IF</th>
+      <th rowspan="2">Average</th>
     </tr>
     <tr>
       <th>Score</th>
@@ -1408,39 +1421,53 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
       <td>0.9062</td>
       <td>0.7500</td>
       <td>0.8906</td>
+      <td>0.8489</td>
     </tr>
     <tr>
       <td>deepseek-reasoner-v3.2-exp</td>
       <td>0.9062</td>
       <td>0.8750</td>
       <td>0.9219</td>
+      <td>0.9010</td>
     </tr>
     <tr>
-      <td>deepseek-reasoner-v3.2- speciale </td>
+      <td>deepseek-reasoner-v3.2-speciale </td>
       <td>0.9375</td>
       <td>0.7500</td>
       <td>0.7031</td>
+      <td>0.7969</td>
     </tr>
     <tr>
       <td>doubao-seed-1-6-251015</td>
       <td>0.8281</td>
       <td>0.8750</td>
       <td>0.7500</td>
+      <td>0.8177</td>
     </tr>
     <tr>
       <td>qwen-plus</td>
       <td>0.8906</td>
       <td>0.8906</td>
       <td>0.8750</td>
+      <td>0.8852</td>
     </tr>
     <tr>
       <td>qwen3-max</td>
       <td>0.8594</td>
       <td>0.7344</td>
       <td>0.8750</td>
+      <td>0.8349</td>
     </tr>
   </tbody>
 </table>
+
+综合所有数据集 & 子集来看，Deepseek V3.2 EXP 得到最高分 0.9010，qwen-plus 拿下总分第二 0.8852 。
+不出所料， Speciale 的指令遵循能力最差，以 0.7969 的均分垫底。
+
+比较每一个模型在各个评测集中的表现，不难发现，除豆包 seed 1.6 以外的其他模型对于英文指令的遵循能力普遍优于中文指令，豆包则恰好相反。
+对比 deepseek-v3.2-speciale 在各个数据集的表现，则可以判断，该模型在多轮指令下的遵循能力差于单轮指令的遵循能力。
+
+<!-- 前文在介绍数据集的时候也有提到，Multi IF 是在 IFEval 基础上改良而来，所以姑且可以认为二者的测试样例具有可比性。 -->
 
 #### **数理推理结果概览**
 
@@ -1452,61 +1479,60 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 
 :::
 
-| Model | Level 1 | Level 2 | Level 3 | Level 4 | Level 5 |
-|-------|---------|---------|---------|---------|---------|
-| deepseek-reasoner-v3.2 | 1.0000 | 1.0000 | 1.0000 | 0.9844 | 0.9531 |
-| deepseek-reasoner-v3.2-exp | 1.0000 | 1.0000 | 1.0000 | 0.9844 | 0.9688 |
-| deepseek-reasoner-v3.2- speciale  | 1.0000 | 1.0000 | 1.0000 | 0.9688 | 0.9844 |
-| doubao-seed-1-6-251015 | 0.9767 | 0.9844 | 0.9531 | 0.9375 | 0.9375 |
-| qwen-plus | 1.0000 | 1.0000 | 0.9844 | 0.9688 | 0.9375 |
-| qwen3-max | 1.0000 | 0.9844 | 1.0000 | 0.9688 | 0.9531 |
+| Model | Level 1 | Level 2 | Level 3 | Level 4 | Level 5 | Average |
+|-------|---------|---------|---------|---------|---------| ------- |
+| deepseek-reasoner-v3.2 | 1.0000 | 1.0000 | 1.0000 | 0.9844 | 0.9531 | 0.9866 |
+| deepseek-reasoner-v3.2-exp | 1.0000 | 1.0000 | 1.0000 | 0.9844 | 0.9688 | 0.9900 |
+| deepseek-reasoner-v3.2- speciale  | 1.0000 | 1.0000 | 1.0000 | 0.9688 | 0.9844 | 0.9900 |
+| doubao-seed-1-6-251015 | 0.9767 | 0.9844 | 0.9531 | 0.9375 | 0.9375 | 0.9565 |
+| qwen-plus | 1.0000 | 1.0000 | 0.9844 | 0.9688 | 0.9375 | 0.9766 |
+| qwen3-max | 1.0000 | 0.9844 | 1.0000 | 0.9688 | 0.9531 | 0.9799 |
+
+这个数据集选得可能不太好，测试的所有模型都能够很好地回答问题。其中，speciale 模型不愧为数理能力特调模型（根据 ds 官方文档）
+以 0.9900 的分数与 ds-exp 共同位列第一。而豆老师不幸以 0.9565 的分数夺下倒一的好成绩。
+
+观察每个模型在不同难度下的输出，由易到难的题目正确率整体趋势都在下降，其中 qwen-plus 在前两个难度表现出众，但在 level 3
+往后正确率下降迅速，说明该模型对基础逻辑掌握较好，但是对于复杂多步推理相较于 deepseek 来说并不擅长。qwen3-max也是类似，
+但是综合能力强于 qwen-plus。豆包则是点外卖 —— 菜到家了，从 Level 1 开始就错，甚至错题比例多于 Level 2 ，令人咋舌。
+
+另外，因为未知原因，`#261: test/intermediate_algebra/558.json` 中 Deepseek 正式版和测试版 EXP 两个模型给出的答案是正确的，
+但是因为格式不正确而被判错；而在 `#273: test/geometry/880.json` 中 deepseek v3.2 exp 与 speciale 两个模型不知道为什么没有输出，
+在 `#287: test/intermediate_algebra/1510.json` 中 deepseek v3.2 正式版没有输出。
+
+无论如何，这一个数据集充分体现出 deepseek 在数理逻辑上的优势。
+
+> [!NOTE]
+> 样例编号根据 GitHub 仓库 `math_500_comparison.html` 中的确定。
 
 #### **代码能力结果概览**
 
 ::: chartjs
 
 ```json
-<!-- @include: ../.vuepress/public/data/swe_bench_verified_mini_merged_pretty.json-->
+<!-- @include:  ../.vuepress/public/data/swebench_rates_chart.json -->
 ```
 
 :::
 
-| Model | Score |
-|-------|-------|
-| deepseek-reasoner-v3.2 | 0.3000 |
-| deepseek-reasoner-v3.2-exp | 0.2600 |
-| deepseek-reasoner-v3.2-speciale  | 0.2800 |
-| doubao-seed-1-6-251015 | 0.3200 |
-| qwen-plus | 0.1800 |
-| qwen3-max | 0.2200 |
+| Model              | Accuracy Rate | Patch Successfully Applied Rate | Fail-to-Pass Rate | Pass-to-Pass Rate |
+| ------------------ | ------------: | ------------------------------: | ----------------: | ----------------: |
+| deepseek-reasoner-v3.2          |        0.3000 |             0.5000 |            0.6563 |            0.9436 |
+| deepseek-reasoner-v3.2-exp      |        0.2600 |             0.4600 |            0.5625 |            0.9226 |
+| deepseek-reasoner-v3.2-speciale |        0.2800 |             0.4600 |            0.5000 |            0.9700 |
+| doubao-seed-1-6-251015          |        0.3200 |             0.6000 |            0.4872 |            0.9251 |
+| qwen-plus                       |        0.1800 |             0.5000 |            0.3243 |            0.9234 |
+| qwen3-max                       |        0.2200 |             0.4800 |            0.4545 |            0.9313 |
 
-::: chartjs
+这些指标中：
 
-```json
-<!-- @include: ../.vuepress/public/data/swebench_grouped_charts/rates_chart.json -->
-```
+- `Accuracy Rate` 就是模型的 `patch`（改动）应用后，本地沙箱单元测试通过率，也就是最终得分；
+- `Patch Successfully Applied Rate` 是成功应用 `patch` 的比例。部分 `patch` 可能会出现无法与代码匹配的情况，这种情况会会直接判 `0` 分。
+- `Fail-to-Pass Rate` 指的是在应用 `patch` 后，原本不能通过的单元测试能够通过（也就是 `patch` 有效）的比例。
+- `Pass-to-Pass Rate` 指的是应用 `patch` 前后，都通过的单元测试（也就是 `patch` 没有影响其他代码运行）的比例。
 
-:::
+这几个指标分别从整体和部分的角度对各个模型的表现进行评价。第一个关注最终的结果，而后三个分别关注模型输出的精准度、改动有效性和改动安全性。
 
-::: chartjs
-
-```json
-<!-- @include: ../.vuepress/public/data/swebench_grouped_charts/small_counts_chart.json -->
-```
-
-:::
-
-::: chartjs
-
-```json
-<!-- @include: ../.vuepress/public/data/swebench_grouped_charts/large_counts_chart.json -->
-```
-
-:::
-
-这个数据集应该是测试指标最多的一个，比较直观且有一定意义的指标多达 20 个。下面对这些指标做简要介绍。
-
-:construction: TODO
+根据测评结果， 豆包意外的以 0.32 的总分拿下第一，而 qwen-plus 以 0.1800 垫底，而 deepseek 系列模型表现一般，但均优于 qwen3-max。
 
 #### **一些其他的发现**（主要关于 Deepseek V3.2 Speciale）
 
@@ -1517,7 +1543,7 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 甚至是六个模型中输出最简短的。当然，部分情况下这个模型也确实会输出比较长的内容。总的来说， Speciale 版模型输出长度范围更多变，
 平均输出长度变短。
 
-这是违背直觉的：为什么在 RL 长度惩罚减小的情况下，文本的输出长度没有变长，反而变短了？至少现在的我没有能力去探求这个问题。
+这就有一个很有意思的问题了：为什么在 RL 长度惩罚减小的情况下，文本的平均输出长度没有变长，反而变短了？
 
 还有一点是非常值得注意的。Speciale 在 Safety Prompts 评测时输出了大量牛头不对马嘴的 _\*神秘\*_ 内容，
 比如莫名其妙出现的 `D` 。
@@ -1537,7 +1563,7 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 D
 ```
 
-\* 这真的不是我操作了结果，它评出来真的是这样的……
+\* 这真的不是我操作结果，它评出来真的是这样的……
 而且这并非个例，还有其他很多极其神秘的输出，在此不再一一列举。
 
 :::
@@ -1546,14 +1572,14 @@ D
 
 - 主动生成文章，即使提示词只要求回答问题（Ethics_And_Morality #51）
 - 中文输入，却给出英文回答（参照上文）
-- 驴唇不对马嘴的答案
 
-这个驴唇不对马嘴的问题或许也能说明模型意图理解能力欠缺。
+这些问题或许也能说明模型意图理解能力较差。
 
 相信 Deepseek 开发团队也发现了上述问题，所以才没有在生产环境中部署它，而仅仅是上线了一个临时的 API 接口。
 
 **关于其他两家的模型**：在多条样本中，depseek系模型的输出风格和语料基本一致，而doubao seed 1.6 qwen3-max 和 qwen-plus
 的输出却比较近似。推测字节跳动和阿里云在训练这些模型的时候使用的数据集重叠度比较大，而与 deepseek 使用的数据集差异较大。
+也不排除模型架构相关的问题，关于模型具体架构没读论文（汗）
 
 #### **成本统计** （向右滚动查看完整数据 :point_right: ）
 
@@ -1577,8 +1603,8 @@ D
 
 | 模型              | 输入（命中缓存）/ Token | 输入（未命中缓存）/ Token | 输出 / Token | 总计 / Token | 总成本     |
 | ----------------- | ----------------------- | ------------------------- | ------------ | ------------ | ---------: |
-| deepseek-reasoner | 1710528                 | 1518785                   | 2770629      | 5999942      | ￥ 11.69   |
-| deepseek-chat     | 9984                    | 33818                     | 64           | 43866        | ￥  0.07   |
+| deepseek-reasoner | 1715840                 | 1581523                   | 4454965      | 7752328      | ￥ 16.87   |
+| deepseek-chat     | 760448                  | 651585                    | 1664         | 1413697      | ￥  1.46   |
 
 在统计 deepseek-chat 的成本时，有一个很有趣的现象：这个模型输出 tokens 数量永远等于请求次数！
 
@@ -1595,6 +1621,8 @@ D
 <a id="experience"></a>
 
 ## **主观评测 · Experience**
+
+接下来这段 **主观评测** 终于可以用到第一部分试水开发出来的神秘平台了！下面将会对文章一开始提到的完整八个模型进行测评
 
 ---
 

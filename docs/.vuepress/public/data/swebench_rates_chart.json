@@ -2,27 +2,19 @@
   "type": "bar",
   "data": {
     "labels": [
-      "Error Samples",
-      "Patch Exists Count",
-      "Patch Is None Count",
-      "Patch Successfully Applied Count",
-      "fail_to_pass.failure",
-      "fail_to_pass.success",
-      "pass_to_pass.failure",
-      "Total Samples"
+      "Accuracy Rate",
+      "Patch Successfully Applied Rate",
+      "Fail-to-Pass Rate",
+      "Pass-to-Pass Rate"
     ],
     "datasets": [
       {
         "label": "deepseek-reasoner-v3.2",
         "data": [
-          25,
-          25,
-          0,
-          25,
-          11,
-          21,
-          46,
-          50
+          0.3,
+          0.5,
+          0.65625,
+          0.9436274509803921
         ],
         "backgroundColor": "#FF638422",
         "borderColor": "#FF6384FF",
@@ -34,14 +26,10 @@
       {
         "label": "deepseek-reasoner-v3.2-exp",
         "data": [
-          27,
-          23,
-          0,
-          23,
-          14,
-          18,
-          71,
-          50
+          0.26,
+          0.46,
+          0.5625,
+          0.9225736095965104
         ],
         "backgroundColor": "#36A2EB33",
         "borderColor": "#36A2EBFF",
@@ -53,14 +41,10 @@
       {
         "label": "deepseek-reasoner-v3.2-special",
         "data": [
-          27,
-          23,
-          0,
-          23,
-          16,
-          16,
-          33,
-          50
+          0.28,
+          0.46,
+          0.5,
+          0.9700272479564033
         ],
         "backgroundColor": "#FFCE5622",
         "borderColor": "#FFCE56FF",
@@ -72,14 +56,10 @@
       {
         "label": "doubao-seed-1-6-251015",
         "data": [
-          20,
-          30,
-          0,
-          30,
-          20,
-          19,
-          84,
-          50
+          0.32,
+          0.6,
+          0.48717948717948717,
+          0.9250669045495094
         ],
         "backgroundColor": "#4BC0C033",
         "borderColor": "#4BC0C0FF",
@@ -91,14 +71,10 @@
       {
         "label": "qwen-plus",
         "data": [
-          25,
-          25,
-          0,
-          25,
-          25,
-          12,
-          87,
-          50
+          0.18,
+          0.5,
+          0.32432432432432434,
+          0.9234154929577465
         ],
         "backgroundColor": "#9966FF22",
         "borderColor": "#9966FFFF",
@@ -110,14 +86,10 @@
       {
         "label": "qwen3-max",
         "data": [
-          26,
-          24,
-          0,
-          24,
-          18,
-          15,
-          95,
-          50
+          0.22,
+          0.48,
+          0.45454545454545453,
+          0.9313087490961678
         ],
         "backgroundColor": "#FF9F4033",
         "borderColor": "#FF9F40FF",
@@ -138,7 +110,7 @@
     "plugins": {
       "title": {
         "display": true,
-        "text": "SWE-bench: Small Counts (0-100 range)",
+        "text": "SWE-bench: Rate Metrics Comparison",
         "font": {
           "size": 18,
           "weight": "bold"
@@ -171,9 +143,6 @@
         },
         "grid": {
           "display": false
-        },
-        "ticks": {
-          "maxRotation": 45
         }
       },
       "y": {
@@ -181,16 +150,17 @@
         "display": true,
         "title": {
           "display": true,
-          "text": "Count",
+          "text": "Rate",
           "color": "#666",
           "font": {
             "size": 14
           }
         },
+        "min": 0,
+        "max": 1.0,
         "grid": {
           "display": true
-        },
-        "min": 0
+        }
       }
     },
     "aspectRatio": 2.0
