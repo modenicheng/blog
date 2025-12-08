@@ -163,6 +163,7 @@ export default defineUserConfig({
         size: true, // 启用图片大小
       },
       chat: true,
+      qrcode: true,
       include: {
         /**
          * 导入文件配置

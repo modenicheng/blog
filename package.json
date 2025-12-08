@@ -17,25 +17,31 @@
     "vp-update": "yarn dlx vp-update"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.6",
     "@vuepress/bundler-vite": "2.0.0-rc.26",
     "http-server": "^14.1.1",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.3",
     "vue": "^3.5.17",
     "vuepress": "2.0.0-rc.26",
-    "vuepress-theme-plume": "1.0.0-rc.180"
+    "vuepress-theme-plume": "1.0.0-rc.181"
   },
   "dependencies": {
+    "@algolia/client-search": "^5.46.0",
     "@types/three": "^0.181.0",
     "@vuepress/shiki-twoslash": "2.0.0-rc.120",
+    "algoliasearch": "^5.46.0",
     "artplayer": "^5.2.3",
     "chart.js": "^4.5.0",
     "corepack": "^0.34.5",
     "echarts": "^6.0.0",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "flowchart.ts": "^3.0.1",
-    "mermaid": "^11.8.1",
+    "markdown-it": "^14.1.0",
+    "mermaid": "^11.12.2",
     "pyodide": "^0.29.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "search-insights": "^2.17.3",
     "three": "^0.181.2"
   }
 }

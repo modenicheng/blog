@@ -15,6 +15,17 @@ tags:
 
 **本文并非在完成整个评测作业后编写，而是与评测进度同步推进**。因此，文中会有诸多左右脑互搏的内容，请仔细甄别（）
 
+或者说，这篇文章会东扯一点西拉一段，没有一个明确的主轴，比较不着重点。所以，如果你只是来寻一个模型推荐，我建议你直接看
+[TL;DR (Too Long; Don't Read)](#tldr) ，中译为 [省流](#tldr) 的章节。
+
+<a id="tldr" />
+
+## **TL;DR · 省流**
+
+Deepseek 全系 _遥遥领先_ ，限时版本 _经常发癫_ ；<br>
+Doubao   Seed _数学很菜_ ，代码跑分 _高得奇怪_ ；<br>
+Qwen3 Max 的确很 _Max_ ，Qwen plus 就 _比较坏_ ；<br>
+
 ## **目标模型**
 
 - DeepSeek V3.2 Reasoner
@@ -165,7 +176,8 @@ tags:
 
 具体一点来说，它会无中生有一大堆语法正确，但是实际上根本不存在的组件进去。写是写出来了，但是编辑器里还是一大堆报错（）
 ![难绷报错](https://img-host.modenc.top/blog/PixPin_2025-11-26_23-37-19.png)
-这个问题我推测，一方面是因为训练数据中混杂了大量的老旧代码，而一旦使用新版本的依赖，就会导致冲突。另一方面就还是幻觉导致的。
+这个问题我推测，一方面是因为训练数据中混杂了大量的老旧代码，导致生成的代码也使用已弃用 API；
+而一旦使用新版本的依赖，就会导致冲突。另一方面就还是幻觉导致的。
 
 另外，AI 构建大项目的时候还有另一个通病，那就是很严重的记忆瓶颈 —— 写着写着就忘了自己要干什么了。
 即使像是 Cline 和 TraeCN SOLO Coder 这种带有一个 TODOLIST 的 Agent 还会忘事儿，何况普通的 AI 呢。
@@ -1056,6 +1068,10 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
 
 这部分会对评测结果进行展示和分析。该说不说这把评测观察到了很多有意思的现象。
 
+> [!IMPORTANT]
+> 由于我实在不知道 12/1 那天我到底测试的是什么模型，所以下面统一用 Deepseek-V3.2-EXP（或简写 EXP）来指称这个模型。
+> ==**文中的 Deepseek-V3.2-EXP 不一定是 Deepseek-V3.2-EXP，有可能是正式版的模型**=={.important} 。这一点请务必注意。或者，干脆别看 EXP 这一组数据就好了。
+
 #### **评测概览**
 
 ::: chartjs
@@ -1222,8 +1238,8 @@ V3.2 speciale 在 IFEval 指令遵循评测集中取得 0.9375 的最高分。
 总体来看，qwen 系列在基础问答和安全性方面更具优势，deepseek-reasoner 系列在逻辑推理和复杂指令处理上表现更佳，
 而 doubao seed 1.6 在代码任务上略有领先。
 
-通过评测结果不难发现，现在各家大模型基础能力都不是很差，但是具体落实到实际情景，用户真正的体验却参差不齐。在下一部分 [主观评测](#experience)
-将主要对这个现象和问题进行探索。
+通过评测结果不难发现，现在各家大模型基础能力都不是很差。但是通过日常观察不难发现，具体落实到实际情景，用户真正的体验往往却参差不齐。
+在下一部分 [主观评测](#experience) 将主要对这个现象和问题进行探索。
 
 #### **事实回答结果概览**
 
@@ -1525,9 +1541,11 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 
 这些指标中：
 
-- `Accuracy Rate` 就是模型的 `patch`（改动）应用后，本地沙箱单元测试通过率，也就是最终得分；
+- `Accuracy Rate` 就是模型的 `patch`（改动）应用至源码后，本地沙箱单元测试通过率，也就是最终得分；
 - `Patch Successfully Applied Rate` 是成功应用 `patch` 的比例。部分 `patch` 可能会出现无法与代码匹配的情况，这种情况会会直接判 `0` 分。
+  这个指标可以比较直观地表现被测模型的工具调用能力。
 - `Fail-to-Pass Rate` 指的是在应用 `patch` 后，原本不能通过的单元测试能够通过（也就是 `patch` 有效）的比例。
+  这个指标更侧重模型真正的代码（修复）能力
 - `Pass-to-Pass Rate` 指的是应用 `patch` 前后，都通过的单元测试（也就是 `patch` 没有影响其他代码运行）的比例。
 
 这几个指标分别从整体和部分的角度对各个模型的表现进行评价。第一个关注最终的结果，而后三个分别关注模型输出的精准度、改动有效性和改动安全性。
@@ -1540,10 +1558,12 @@ deepseek-reasoner-v3.2- speciale  意外的垫底，均分仅为 0.7366。其余
 “This model _(Deepseek-V3.2-Speciale)_ was trained exclusively on reasoning data with a reduced length penalty during RL”
 [^ds-paper] 。
 而实际上在人工评审 Safety Prompts 数据集的时候，我们注意到 Speciale 模型往往是 Deepseek 系列模型中输出长度最短的那个，
-甚至是六个模型中输出最简短的。当然，部分情况下这个模型也确实会输出比较长的内容。总的来说， Speciale 版模型输出长度范围更多变，
-平均输出长度变短。
+甚至是六个模型中输出最简短的。当然，部分情况下这个模型也确实会输出比较长的内容。总的来说，在不涉及数学推理领域的数据集中 Speciale
+版模型输出长度范围更多变，平均输出长度变短。然而，在数学领域中，依据 Deepseek 官方发布的配图 [^ds-apidoc-251201]（见下图）中， Speciale 模型消耗的 Tokens
+约数却要显著多于 Thinking 。这是一个很值得关注的现象：为什么在 RL 长度惩罚减小的情况下，文本的平均输出长度变短了？
+考虑到其数学相关问题平均输出长度显著更长，那么符合预期的现象应该是文本的输出长度也相应变长。
 
-这就有一个很有意思的问题了：为什么在 RL 长度惩罚减小的情况下，文本的平均输出长度没有变长，反而变短了？
+![Deepseek 官方公告配图（得分后的小括号内是平均消耗 Tokens 约数）](https://api-docs.deepseek.com/zh-cn/img/v3.2_251201_benchmark_table_cn.webp)
 
 还有一点是非常值得注意的。Speciale 在 Safety Prompts 评测时输出了大量牛头不对马嘴的 _\*神秘\*_ 内容，
 比如莫名其妙出现的 `D` 。
@@ -1575,11 +1595,20 @@ D
 
 这些问题或许也能说明模型意图理解能力较差。
 
-相信 Deepseek 开发团队也发现了上述问题，所以才没有在生产环境中部署它，而仅仅是上线了一个临时的 API 接口。
+这些测试结果是符合“该模型 _（DeepSeek-V3.2-Speciale）_ 具备出色的指令跟随、严谨的数学证明与逻辑验证能力”
+“暂未针对日常对话与写作任务进行专项优化” [^ds-apidoc-251201] 的官方描述的。
 
 **关于其他两家的模型**：在多条样本中，depseek系模型的输出风格和语料基本一致，而doubao seed 1.6 qwen3-max 和 qwen-plus
 的输出却比较近似。推测字节跳动和阿里云在训练这些模型的时候使用的数据集重叠度比较大，而与 deepseek 使用的数据集差异较大。
 也不排除模型架构相关的问题，关于模型具体架构没读论文（汗）
+
+**EDIT 2025-12-07**: 在人工评审数学评测集 MATH-500 的时候注意到了一个奇怪的现象，对于一道特定的题，Deepseek Reasoner
+可以稳定复现一直思考、无正文输出的情况，我自己在 API 和网页分别尝试了好几次都是相同的结果。不过有一定概率可以正常输出。
+下面是这个会让 ds 死机的问题：
+
+```text
+A gecko is in a room that is 12 feet long, 10 feet wide and 8 feet tall. The gecko is currently on a side wall ($10^{\prime}$ by $8^{\prime}$), one foot from the ceiling and one foot from the back wall ($12^{\prime}$ by $8^{\prime}$). The gecko spots a fly on the opposite side wall, one foot from the floor and one foot from the front wall. What is the length of the shortest path the gecko can take to reach the fly assuming that it does not jump and can only walk across the ceiling and the walls? Express your answer in simplest radical form. Please reason step by step, and put your final answer within \boxed{}.
+```
 
 #### **成本统计** （向右滚动查看完整数据 :point_right: ）
 
@@ -1622,7 +1651,50 @@ D
 
 ## **主观评测 · Experience**
 
-接下来这段 **主观评测** 终于可以用到第一部分试水开发出来的神秘平台了！下面将会对文章一开始提到的完整八个模型进行测评
+(写这段的时候已经是 12/6 了……)
+
+接下来这段 **主观评测** 终于可以用到第一部分试水开发出来的神秘平台了！下面将会对文章一开始提到的八个模型进行测评。由于已经错过了
+Deepseek V3.2 EXP 的 API，所以我们只好直接测试正式版本了。
+
+主观评测主要目的是评估在真实使用情境下，各个模型的具体表现。我认为，以下几个角度会比较明显地影响用户体验：
+
+1. 意图理解
+   - 模型能不能准确理解用户想要干什么，尤其当用户提示词较为模糊时
+2. 语言能力
+   - 模型说不说人话、AI 味道大不大
+3. 逻辑推理能力
+   - 数理题目做得好不好、在比较复杂的情境中解决问题的能力强不强
+4. 幻觉强度
+   - 给出的错误信息的比例 / 错误认知的比例
+5. 记忆 & 上下文能力
+   - 能不能在多轮对话之后还能对第一轮对话的信息有印象
+
+当然，在基准评测中测过的指标也会兼顾，不然基准测试就不能起到辅助标定各个模型相对水平的功能了。
+
+下面是问题列表。考虑到手工测试便捷程度和评测上下文能力的需求，下面的提示词都会是在相同会话中连续给出的。
+
+::: demo-wrapper
+
+1. 测试语言能力 & 指令遵循
+
+   ``` text :no-line-numbers
+   写一首以 **京城冬雪** 为主题的歌行体长诗，保证每联之间的押韵。
+   具体要求：
+   - 题目自拟
+   - 时间线：现代北京，而不要写古代京城
+   - 遣词造句：不要在全诗中出现 `雪` 字，但是需要用修辞方法明确让读者读懂本诗主题是在写京城冬雪
+   ```
+
+   这条提示词指令遵循部分借鉴之前评测集的思路，使用关键字 `雪` 判定。若模型回复中出现 `雪` 字则指令遵循这一项是不过关的。
+   剩下对于文学性的评定依靠主观评分。
+
+2. 意图理解
+
+  ```text :no-line-numbers
+  
+  ```
+
+:::
 
 ---
 
@@ -1718,7 +1790,9 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
 }
 ```
 
-#### Deepseek Thesis
+### Models
+
+#### Deepseek Paper
 
 ```bibtex
 @misc{deepseekai2025deepseekv32,
@@ -1729,6 +1803,8 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
 ```
 
 ### 引用本文 · Cite This Article
+
+如果本文对你的工作有所帮助，请考虑引用本文 ~~（这篇文章真的有人会引用吗……~~
 
 ```bibtex
 @misc{modenicheng2025llmeval,
@@ -1758,8 +1834,8 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
 
 [^safety-prompts]: Thesis at <https://arxiv.org/abs/2304.10436>
 
-[^ds-paper]: Deepseek V3.2 & V3.2  speciale Paper is at <https://modelscope.cn/models/deepseek-ai/DeepSeek-V3.2/resolve/master/assets/paper.pdf>
-
+[^ds-paper]: DeepSeek-V3.2: Pushing the Frontier of Open Large Language Models <https://modelscope.cn/models/deepseek-ai/DeepSeek-V3.2/resolve/master/assets/paper.pdf>
+[^ds-apidoc-251201]: DeepSeek V3.2 正式版：强化 Agent 能力，融入思考推理 <https://api-docs.deepseek.com/zh-cn/news/news251201>
 <style>
 .vp-doc table {
   width: fit-content;
