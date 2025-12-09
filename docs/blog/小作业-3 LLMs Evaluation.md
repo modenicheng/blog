@@ -1997,6 +1997,12 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
 }
 ```
 
+## **附录 · Appendices**
+
+### **主观评测实验数据表格**
+
+<LLMDataTable detailed />
+
 [^evalscope]: Github repository at <https://github.com/modelscope/evalscope>
 [^evalscope-docs-llms]: EvalScope documents listing all the datasets supported <https://evalscope.readthedocs.io/zh-cn/latest/get_started/supported_dataset/llm.html>
 [^multi-if]: Thesis at <https://arxiv.org/abs/2410.15553>
@@ -2028,97 +2034,4 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
   display: block;
   overflow-x: clip;
 }
-</style>
-
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> -->
-<style>
-  .rendered-markdown {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
-  }
-  .rendered-markdown h1,
-  .rendered-markdown h2,
-  .rendered-markdown h3,
-  .rendered-markdown h4,
-  .rendered-markdown h5,
-  .rendered-markdown h6 {
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-    font-weight: bold;
-  }
-  .rendered-markdown h1 { font-size: 1.5em; }
-  .rendered-markdown h2 { font-size: 1.3em; }
-  .rendered-markdown h3 { font-size: 1.1em; }
-  .rendered-markdown p {
-    margin-bottom: 1em;
-  }
-  .rendered-markdown ul,
-  .rendered-markdown ol {
-    padding-left: 2em;
-    margin-bottom: 1em;
-  }
-  .rendered-markdown blockquote {
-    border-left: 3px solid #ddd;
-    padding-left: 1em;
-    margin-left: 0;
-    color: #666;
-  }
-  .rendered-markdown code {
-    background-color: #f5f5f5;
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-size: 0.9em;
-  }
-  .rendered-markdown pre {
-    background-color: #f5f5f5;
-    padding: 1em;
-    border-radius: 5px;
-    overflow-x: auto;
-  }
-  .rendered-markdown pre code {
-    background-color: transparent;
-    padding: 0;
-  }
-  .quest-section {
-    background-color: #fff;
-  }
-  .content-cell {
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-  }
-  .reasoning-cell {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-  }
-  table {
-    table-layout: fixed;
-  }
-  table th {
-    width: 150px;
-  }
-  table td {
-    vertical-align: top;
-  }
-  .collapse-btn[aria-expanded="true"]::after {
-    content: " ▲";
-  }
-  .collapse-btn[aria-expanded="false"]::after {
-    content: " ▼";
-  }
-  .collapse-btn {
-    text-decoration: none;
-    color: #495057;
-  }
-  .collapse-btn:hover {
-    color: #0d6efd;
-  }
 </style>
