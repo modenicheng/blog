@@ -7,6 +7,7 @@ import NpmBadgeGroup from 'vuepress-theme-plume/features/NpmBadgeGroup.vue'
 import Home from './theme/components/Home.vue';
 
 import './theme/styles/custom.css'
+import LLMDataTable from './theme/components/LLMDataTable.vue';
 
 export default defineClientConfig({
   enhance({ app }) {
@@ -18,5 +19,6 @@ export default defineClientConfig({
 
     // your custom components
     app.component('Home', Home)
+    app.component('LLMDataTable', LLMDataTable)
   },
 })
