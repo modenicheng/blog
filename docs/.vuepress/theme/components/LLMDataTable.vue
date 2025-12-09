@@ -64,7 +64,7 @@ const averageScores = computed(() => {
       }
     }
 
-    averages.push(count > 0 ? (sum / count).toFixed(2) : "—");
+    averages.push(count > 0 ? (sum / count).toFixed(4) : "—");
   }
 
   return averages;
@@ -146,14 +146,15 @@ async function loadMarkdownIt() {
 
     // 动态导入 katex 插件并应用
     // const { katex } = await import("@mdit/plugin-katex-slim");
-    katex(md, {
-      // 支持 $...$ 和 \[...\] \(...\) 语法
-      delimiters: "all",
-      // 不允许 $ 语法两边有空格（默认）
-      allowInlineWithSpace: true,
-      // 启用数学围栏
-      mathFence: false,
-    });
+    // katex(md, {
+    //   // 支持 $...$ 和 \[...\] \(...\) 语法
+    //   delimiters: "all",
+    //   // 不允许 $ 语法两边有空格（默认）
+    //   allowInlineWithSpace: true,
+    //   // 启用数学围栏
+    //   mathFence: false,
+    //   displayMode: true
+    // });
 
     markdownRenderer.value = md;
   } catch (err) {
@@ -406,6 +407,11 @@ onMounted(async () => {
   text-wrap: wrap;
   /* 确保内容不会溢出单元格 */
   box-sizing: border-box;
+  text-justify: auto;
+}
+
+table td {
+
 }
 
 .collapsed-row {
@@ -429,7 +435,6 @@ onMounted(async () => {
   max-width: 30rem;
   overflow-x: auto;
   overflow-y: hidden;
-  text-align: center;
 }
 
 .llm-data-table :deep(.katex-html) {
