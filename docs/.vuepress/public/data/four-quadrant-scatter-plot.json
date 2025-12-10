@@ -74,7 +74,7 @@
           { "x": 0.70, "y": 8.0 },
           { "x": 0.80, "y": 8.0 }
         ],
-        "borderColor": "rgba(0, 0, 0, 0.3)",
+        "borderColor": "#FF9F40BB",
         "borderWidth": 2,
         "borderDash": [10, 5],
         "pointRadius": 0,
@@ -88,7 +88,7 @@
           { "x": 0.75, "y": 6.0 },
           { "x": 0.75, "y": 10.0 }
         ],
-        "borderColor": "rgba(0, 0, 0, 0.3)",
+        "borderColor": "#FF9F40BB",
         "borderWidth": 2,
         "borderDash": [10, 5],
         "pointRadius": 0,
@@ -129,8 +129,7 @@
         "min": 0.70,
         "max": 0.80,
         "grid": {
-            "display": true,
-            "color": "#FF9F40BB"
+            "display": true
         }
       },
       "y": {
@@ -141,8 +140,7 @@
         "min": 6.0,
         "max": 10.0,
         "grid": {
-            "display": true,
-            "color": "#FF9F40BB"
+            "display": true
         }
       }
     }
