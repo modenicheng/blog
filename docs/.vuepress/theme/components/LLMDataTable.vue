@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import MarkdownIt from "markdown-it";
-import { katex } from "@mdit/plugin-katex-slim";
 
 interface ResponseData {
   model: string;
