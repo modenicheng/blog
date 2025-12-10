@@ -1224,15 +1224,17 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
         <th>数理逻辑</th>
         <th colspan="2">指令遵循</th>
         <th>代码能力</th>
+        <th>平均分数</th>
     </tr>
     <tr>
       <th>数据集 →</th>
-      <th>Safety  Prompts</th>
+      <th>Safety Prompts</th>
       <th>Chinese Simple QA</th>
       <th>MATH-500</th>
       <th>Multi IF</th>
       <th>IFEval</th>
       <th>SWE Bench Verified Mini</th>
+      <th>—</th>
     </tr>
   </thead>
   <tbody>
@@ -1244,6 +1246,7 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
       <td>0.8984</td>
       <td>0.9062</td>
       <td>0.2600</td>
+      <td>0.7536</td>
     </tr>
     <tr>
       <td>qwen3-max</td>
@@ -1253,6 +1256,7 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
       <td>0.8047</td>
       <td>0.8594</td>
       <td>0.2200</td>
+      <td>0.7628</td>
     </tr>
     <tr>
       <td>doubao-seed-1-6-251015</td>
@@ -1262,6 +1266,7 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
       <td>0.8125</td>
       <td>0.8281</td>
       <td>0.3200</td>
+      <td>0.7344</td>
     </tr>
     <tr>
       <td>qwen-plus</td>
@@ -1271,6 +1276,7 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
       <td>0.8828</td>
       <td>0.8906</td>
       <td>0.1800</td>
+      <td>0.7675</td>
     </tr>
     <tr>
       <td>deepseek-reasoner V3.2</td>
@@ -1280,15 +1286,17 @@ Safety Prompts [^safety-prompts] 数据集中下属两个大类，一个是本�
       <td>0.8203</td>
       <td>0.9062</td>
       <td>0.3000</td>
+      <td>0.7501</td>
     </tr>
     <tr>
-      <td>deepseek-reasoner V3.2  speciale </td>
+      <td>deepseek-reasoner V3.2 speciale</td>
       <td>0.7366</td>
       <td>0.7109</td>
       <td>0.9900</td>
       <td>0.7266</td>
       <td>0.9375</td>
       <td>0.2800</td>
+      <td>0.7303</td>
     </tr>
   </tbody>
 </table>
@@ -2034,6 +2042,23 @@ Kimi K2 Turbo 和豆包则遗憾垫底。
   另外由于在开发平台的时候偷懒了没实现从返回数据中提取每次调用的用量信息，所以本地也没调用记录（）
 
 ## **结论 · Conclusions**
+
+综合基准评测和主观评测两个维度，现在对二者都参与了的模型绘制一张四象限散点图，以便直观体现它们的相对水平。
+
+::: chartjs
+
+```json
+<!-- @include: ../.vuepress/public/data/four-quadrant-scatter-plot.json -->
+```
+
+:::
+
+这张图中，越靠右上的点说明在基准评测和主观评测中都拿到了较高的分数，综合来说性能就越强。考虑部分模型没有基准评测数据，
+所以暂且不绘制这些模型。此外，因为部分主观评测指标区分度实在是太小，所以在图中也不绘制。
+
+所以，综合所有主客观数据，Qwen3-Max 无疑是体验和性能双佳的模型，而 DeepSeek V3.2 Reasoner 紧跟其后。这两个模型的实力毋庸置疑。
+而 qwen-plus 则有花瓶之嫌，跑分挺高但是实际体验却并不太好，体验下来甚至弱于豆包。豆包则算是比较诚实，跑分不是很高的情况下，
+体验也符合预期只能说。
 
 ### 全局成本统计
 

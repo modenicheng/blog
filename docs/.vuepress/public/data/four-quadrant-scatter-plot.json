@@ -1,0 +1,150 @@
+{
+  "type": "scatter",
+  "data": {
+    "datasets": [
+      {
+        "label": "DeepSeek Reasoner V3.2",
+        "data": [
+          {
+            "x": 0.7501,
+            "y": 8.9615
+          }
+        ],
+        "backgroundColor": "#FF6384",
+        "borderColor": "#FF6384",
+        "pointRadius": 6,
+        "pointHoverRadius": 8
+      },
+      {
+        "label": "Qwen3 Max",
+        "data": [
+          {
+            "x": 0.7628,
+            "y": 8.7308
+          }
+        ],
+        "backgroundColor": "#36A2EB",
+        "borderColor": "#36A2EB",
+        "pointRadius": 6,
+        "pointHoverRadius": 8
+      },
+      {
+        "label": "DeepSeek Reasoner Special",
+        "data": [
+          {
+            "x": 0.7303,
+            "y": 8.6154
+          }
+        ],
+        "backgroundColor": "#FFCD56",
+        "borderColor": "#FFCD56",
+        "pointRadius": 6,
+        "pointHoverRadius": 8
+      },
+      {
+        "label": "Doubao Seed 1.6",
+        "data": [
+          {
+            "x": 0.7344,
+            "y": 7.2308
+          }
+        ],
+        "backgroundColor": "#4BC0C0",
+        "borderColor": "#4BC0C0",
+        "pointRadius": 6,
+        "pointHoverRadius": 8
+      },
+      {
+        "label": "Qwen Plus",
+        "data": [
+          {
+            "x": 0.7675,
+            "y": 6.6154
+          }
+        ],
+        "backgroundColor": "#9966FF",
+        "borderColor": "#9966FF",
+        "pointRadius": 6,
+        "pointHoverRadius": 8
+      },
+      {
+        "type": "line",
+        "label": "--- 体验及格线 (8.0) ---",
+        "data": [
+          { "x": 0.70, "y": 8.0 },
+          { "x": 0.80, "y": 8.0 }
+        ],
+        "borderColor": "rgba(0, 0, 0, 0.3)",
+        "borderWidth": 2,
+        "borderDash": [10, 5],
+        "pointRadius": 0,
+        "showLine": true,
+        "fill": false
+      },
+      {
+        "type": "line",
+        "label": "--- 性能平均线 (0.75) ---",
+        "data": [
+          { "x": 0.75, "y": 6.0 },
+          { "x": 0.75, "y": 10.0 }
+        ],
+        "borderColor": "rgba(0, 0, 0, 0.3)",
+        "borderWidth": 2,
+        "borderDash": [10, 5],
+        "pointRadius": 0,
+        "showLine": true,
+        "fill": false
+      }
+    ]
+  },
+  "options": {
+    "responsive": true,
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "模型评测四象限：主观体验 vs 客观基准",
+        "font": {
+          "size": 18
+        }
+      },
+      "legend": {
+        "position": "bottom",
+        "labels": {
+            "usePointStyle": true
+        }
+      },
+      "tooltip": {
+        "mode": "nearest",
+        "intersect": false
+      }
+    },
+    "scales": {
+      "x": {
+        "type": "linear",
+        "position": "bottom",
+        "title": {
+          "display": true,
+          "text": "客观基准分 (Objective)"
+        },
+        "min": 0.70,
+        "max": 0.80,
+        "grid": {
+            "display": true,
+            "color": "#FF9F40BB"
+        }
+      },
+      "y": {
+        "title": {
+          "display": true,
+          "text": "主观体验分 (Subjective)"
+        },
+        "min": 6.0,
+        "max": 10.0,
+        "grid": {
+            "display": true,
+            "color": "#FF9F40BB"
+        }
+      }
+    }
+  }
+}
