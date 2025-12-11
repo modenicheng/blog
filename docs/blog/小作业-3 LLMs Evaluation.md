@@ -27,7 +27,8 @@ Gemini 3  直接 _**杀穿**_ ，Kimi K2 莫名 _**拉完**_ 。
 
 综合来看，Gemini 3 Pro 还是无可置疑的 2025 年最出色的闭源模型。在诸多切身使用场景中，它都可以出色地完成用户给出的任务。
 而 Deepseek Reasoner 仍旧是开源系列最强大的模型，它的数理能力一骑绝尘，且它通过稀疏注意力机制有效地降低了模型推理成本，
-这使得它的 API 价格相对于同等参数量的其他模型有巨大优势，简直就是白菜价。~~看单价来说貌似确实和白菜类似，两块一斤的白菜挺合理不是吗？~~
+这使得它的 API 价格相对于同等参数量的其他模型有巨大优势，简直就是白菜价。~~看单价来说貌似大概是大白菜市价二倍，~~
+~~一块一斤的白菜 [^chinese-cabbage] 挺合理不是吗？~~
 而 Kimi K2 Turbo 可能是最不值得调用 API 的大模型，它在通用领域表现平平，但是它的 API 价格却较高，调用成本会比较吓人。
 相较而言，阿里的千问系列就相对平衡，在质价比这一块介于 DeepSeek 和 Kimi 中间。而对于一些文学性或者知识量要求较高的场景
 Qwen3-max 都表现得不错，基本算是第一梯队。
@@ -2094,8 +2095,11 @@ Kimi K2 Turbo 和豆包则遗憾垫底。
 
 有些模型成本差异过大其实主要是因为没有参与基准评测，只参与到主观评测中。相对的这些模型开销就小一些。
 
-所以，如果算上所有的 Tokens 消耗和成本，或许 ==**DeepSeek V3.2 Reasoner 才是多数场景下的首选**==。它首先在体验和性能上有相对出色的表现，
+所以，如果算上所有的 Tokens 消耗和成本，或许 ==DeepSeek V3.2 Reasoner 才是 **多数** 场景下的首选==。它首先在体验和性能上有相对出色的表现，
 同时还有白菜价 API ，质价比是比 豆包、Kimi K2 系列都要高的，尤其是对于 Gemini 3 Pro，它 API 输出价格实在是太贵了，容易不小心让钱包变空（）
+
+因此最终来看，如果你不需要调用 API 进行在线推理，只是使用网页的话，你完全可以无脑奔向 Google AI Studio 的 Gemini 3 Pro。它确实有这样的实力。
+而如果要求国产可控，但是不太考虑成本，Qwen3 Max 将会是首选。当然，如果即要求开源，又要求成本可控，DeepSeek V3.2 Reasoner 无疑是首选。
 
 ## **致谢 · Acknowledgments**
 
@@ -2120,6 +2124,8 @@ Kimi K2 Turbo 和豆包则遗憾垫底。
   评测结果中，所有涉及到文学领域的内容都是他来打分的。包括但不仅限于 Quest ID 1.1、1.2、2.2、4 和 10；
 - Zhenhong Liu，为主观评测中测试幻觉的部分添了一个评测提示词，并启发我写出另一些提示词；
 - Zicheng Wang，指出了主观评测中我评分的几处失误，增加了评分的准确度。
+
+在此，也对其他所有在我推进项目中给予支持和鼓励的老师与同学们致以诚挚的感谢。
 
 最后，也要感谢人工智能导论这门课，没这个课我大概是不会写这篇文章的。
 
@@ -2249,6 +2255,7 @@ MATH-500 是从 MATH 数据集（800,000 条数据）中挑选出来的少量样
 
 <LLMDataTable detailed />
 
+[^chinese-cabbage]: 北京新发地价格行情 2025/12/11 日 查询数据 <http://www.xinfadi.com.cn/priceDetail.html>
 [^evalscope]: Github repository at <https://github.com/modelscope/evalscope>
 [^evalscope-docs-llms]: EvalScope documents listing all the datasets supported <https://evalscope.readthedocs.io/zh-cn/latest/get_started/supported_dataset/llm.html>
 [^multi-if]: Thesis at <https://arxiv.org/abs/2410.15553>
