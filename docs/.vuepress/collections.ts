@@ -20,8 +20,9 @@ const collections: ThemeCollectionItem[] = [
         prefix: "clang-programming",
         items: "auto",
       },
-      { text: "数学分析 | Mathematical Analysis" },
-      { text: "大学化学 | University Chemistry", 
+      // { text: "数学分析 | Mathematical Analysis" },
+      {
+        text: "大学化学 | University Chemistry",
         prefix: "chemistry",
         items: "auto",
       },
@@ -29,7 +30,7 @@ const collections: ThemeCollectionItem[] = [
         text: "人工智能导论 | Introduction to Artificial Intelligence",
         prefix: "introduction-to-artificial-intelligent",
         items: "auto",
-      }
+      },
     ],
   },
 ];
