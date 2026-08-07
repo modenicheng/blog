@@ -20,7 +20,8 @@ nvme nvmeX: I/O tag ... timeout, completion polled
 
 开机、运行《原神》、扫描目录都可能触发，每次卡顿约 30 秒。禁用 APST、ASPM，换 LTS 内核，都没能彻底解决；把原神从 NTFS 搬到 ext4 后，问题依旧，而且两块 NVMe 都出现过同样错误。
 
-解决方案是 **在 BIOS 关闭 VMD**。两块 SSD 改走原生 NVMe 路径后，Live USB 和已安装系统都不再复现 timeout，Linux 7.1.5 也能正常启动。所以目前最实用的结论是：这个问题和 Intel VMD 相关，可能涉及 VMD、PCIe 中断路径、平台固件和 Linux 驱动之间的兼容性。（可惜，我才疏学浅，拼尽全力无法找到根因）
+解决方案是 **在 BIOS 关闭 VMD**。两块 SSD 改走原生 NVMe 路径后，Live USB 和已安装系统都不再复现 timeout，Linux 7.1.5 也能正常启动。所以目前最实用的结论是：这个问题和 Intel VMD
+相关，可能涉及 VMD、PCIe 中断路径、平台固件和 Linux 驱动之间的兼容性。（可惜，我才疏学浅，拼尽全力无法找到根因）
 
 ## 0. 基础信息
 
@@ -161,7 +162,8 @@ du -h -d 1
 wineboot.exe  D  ext4_read_bh
 ```
 
-这解释了为什么游戏卡顿时 CPU 和 GPU 占用会一起下降：进程正在等根分区读取完成。整个过程中没有看到 `EXT4-fs error`、`journal aborted` 或 `Buffer I/O error`，所以没有证据表明 ext4 自己坏了。
+这解释了为什么游戏卡顿时 CPU 和 GPU 占用会一起下降：进程正在等根分区读取完成。整个过程中没有看到 `EXT4-fs error`、
+`journal aborted` 或 `Buffer I/O error`，所以没有证据表明 ext4 自己坏了。
 
 ### 3.2 顺手测试 CPU C-state
 
@@ -199,7 +201,8 @@ irq_handler_exit
 耗时：30.038991s
 ```
 
-提交后立即进过一次对应 IRQ，但 NVMe handler 返回 `unhandled`。之后约 30 秒没有看到这个队列对应 IRQ，最后 timeout 路径通过轮询发现请求完成。与此同时，其他队列还在继续处理请求。除此之外，trace 还抓到了两个约 14 秒的长尾读取。
+提交后立即进过一次对应 IRQ，但 NVMe handler 返回 `unhandled`。之后约 30 秒没有看到这个队列对应 IRQ，最后 timeout
+路径通过轮询发现请求完成。与此同时，其他队列还在继续处理请求。除此之外，trace 还抓到了两个约 14 秒的长尾读取。
 
 这次 trace 说明 VMD/NVMe 路径确实会让部分命令长时间得不到完成。至于具体是 SSD 晚完成，还是完成中断晚到，不能只看一行 `completion polled` 就下结论；不过问题已经明显不只是“磁盘读满了”。
 
@@ -229,7 +232,8 @@ I/O tag ... timeout, completion polled
 
 BIOS 禁用 VMD 后，从独立的 LiveUSB 系统启动，挂载硬盘并执行了数次 `du -h -d 1`，均未复现卡顿；另一个 TTY 中也没有观察到 NVMe timeout。
 
-之后在已安装系统中继续使用 native NVMe 路径，Linux 6.18.41 LTS 和 7.1.5 都能正常启动。因此，至少可以确认：当前平台在 VMD 开启时存在问题，关闭 VMD 后问题消失。至于锅具体落在 VMD 驱动、BIOS、PCIe 中断路径还是它们之间的组合，目前没必要继续细分，关闭 VMD 已经解决实际使用问题。
+之后在已安装系统中继续使用 native NVMe 路径，Linux 6.18.41 LTS 和 7.1.5 都能正常启动。因此，至少可以确认：当前平台在 VMD 开启时存在问题，关闭 VMD 后问题消失。
+至于锅具体落在 VMD 驱动、BIOS、PCIe 中断路径还是它们之间的组合，目前没必要继续细分，关闭 VMD 已经解决实际使用问题。
 
 关闭 VMD 后，前面为了排查 NVMe timeout 加上的参数都可以移除，例如：
 
@@ -243,8 +247,13 @@ nvme.use_threaded_interrupts=1
 
 ## 5. 前人栽树，后人乘凉
 
-和朋友聊起此事，得知原来 Meteor Lake (Intel Ultra 9 185H) 也有类似现象，相关案例见 [Kernel Bugzilla #219220](https://bugzilla.kernel.org/show_bug.cgi?id=219220)。另一个 VMD IRQ 生命周期回归见 [Ubuntu Launchpad #2134424](https://bugs.launchpad.net/ubuntu/+source/linux-signed-hwe-6.17/+bug/2134424)。
+和朋友聊起此事，得知原来 Meteor Lake (Intel Ultra 9 185H) 也有类似现象，相关案例见 [Kernel Bugzilla #219220](https://bugzilla.kernel.org/show_bug.cgi?id=219220)。
+另一个 VMD IRQ 生命周期回归见 [Ubuntu Launchpad #2134424](https://bugs.launchpad.net/ubuntu/+source/linux-signed-hwe-6.17/+bug/2134424)。
 
-对应补丁见：[补丁邮件归档](https://yhbt.net/lore/linux-patches/20251021195043.267235879@linuxfoundation.org/)、[补丁文件镜像](https://gitlab.manjaro.org/packages/core/linux617/-/blob/6641f07fa8334ed858123c20eca8942eecd8cad1/0000-PCI-vmd-override-irq_startup-irq_shutdown-in-vmd_init_dev_msi_info.patch) 和 [主线提交](https://github.com/torvalds/linux/commit/e433110eb5bf067f74d3d15c5fb252206c66ae0b)。这个补丁已经进入 Linux 主线，但它修的是 VMD MSI/MSI-X 中断域的 `irq_startup()`/`irq_shutdown()` 生命周期，主要针对一个特定内核回归，并不等于它已经修好本文硬件上的 timeout。准确来说，它和本文问题很像，值得拿来编译内核跑一下试试；只是我懒，最后没有真的编译测试（毕竟我只是想快点用上 Linux 而不是给它做开发）。
+对应补丁见：[补丁邮件归档](https://yhbt.net/lore/linux-patches/20251021195043.267235879@linuxfoundation.org/)、
+[补丁文件镜像](https://gitlab.manjaro.org/packages/core/linux617/-/blob/6641f07fa8334ed858123c20eca8942eecd8cad1/0000-PCI-vmd-override-irq_startup-irq_shutdown-in-vmd_init_dev_msi_info.patch)
+和 [主线提交](https://github.com/torvalds/linux/commit/e433110eb5bf067f74d3d15c5fb252206c66ae0b)。这个补丁已经进入 Linux 主线，但它修的是
+VMD MSI/MSI-X 中断域的`irq_startup()`/`irq_shutdown()` 生命周期，主要针对一个特定内核回归，并不等于它已经修好本文硬件上的 timeout。准确来说，它和本文问题很像，值得拿来编译内核跑一下试试；
+只是我懒，最后没有真的编译测试（毕竟我只是想快点用上 Linux 而不是给它做开发）。
 
 注意到，我使用的 CPU 恰是 MTL 的下一代 ARL，而查阅 Intel 官方更新记录，也没看出 VMD 这条路径有什么明确修复，只看到平台增加了一路 VMD。至于 MTL 和 ARL 的问题是否同源，目前只能说很像，不好直接盖棺定论。

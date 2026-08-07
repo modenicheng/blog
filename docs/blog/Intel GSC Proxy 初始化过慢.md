@@ -1,6 +1,6 @@
 ---
 title: Intel GSC Proxy 初始化过慢
-createTime: 2026/08/07 15:30:00
+createTime: 2026/08/07 22:28:31
 permalink: /blog/gsc-proxy-init/
 tags:
   - Linux
